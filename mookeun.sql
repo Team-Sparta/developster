@@ -1,23 +1,24 @@
-CREATE TABLE comments(
-    id bigint auto_increment primary key,
-    post_id bigint not null,
-    parent_id bigint,
-    contents varchar(200),
-    created_at timestamp default current_timestamp,
-    modified_at timestamp default current_timestamp on update current_timestamp,
-    foreign key (post_id) references posts(id) on delete  cascade,
-    foreign key (parent_id) references comments(id) on delete cascade
+CREATE TABLE COMMENTS (
+                          ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+                          POST_ID BIGINT NOT NULL,
+                          PARENT_ID BIGINT,
+                          CONTENTS VARCHAR(200) NOT NULL,
+                          CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          MODIFIED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                          FOREIGN KEY (POST_ID) REFERENCES POSTS(ID) ON DELETE CASCADE,
+                          FOREIGN KEY (PARENT_ID) REFERENCES COMMENTS(ID) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-create table comment_likes(
-    id bigint auto_increment primary key,
-    user_id bigint not null,
-    post_id bigint not null,
-    created_at timestamp default current_timestamp,
-    foreign key (user_id) references users(user_id) on delete cascade,
-    foreign key (post_id) references posts(id) on delete cascade
+CREATE TABLE COMMENT_LIKES (
+                               ID BIGINT AUTO_INCREMENT PRIMARY KEY,
+                               USER_ID BIGINT NOT NULL,
+                               POST_ID BIGINT NOT NULL,
+                               CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                               FOREIGN KEY (USER_ID) REFERENCES USERS(USER_ID) ON DELETE CASCADE,
+                               FOREIGN KEY (POST_ID) REFERENCES POSTS(ID) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE comment_likes
-    ADD CONSTRAINT unique_user_post
-        UNIQUE (user_id, post_id);
+ALTER TABLE COMMENT_LIKES
+    ADD CONSTRAINT UNIQUE_USER_POST
+        UNIQUE (USER_ID, POST_ID);
+
