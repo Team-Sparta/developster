@@ -12,7 +12,7 @@ CREATE TABLE follows (
     user_id BIGINT NOT NULL ,
     followed_user_id BIGINT NOT NULL ,
     followed_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) references users (id),
-    FOREIGN KEY (followed_user_id) references users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (followed_user_id) REFERENCES users (id),
     UNIQUE KEY follow (user_id,followed_user_id)
 );
