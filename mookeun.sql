@@ -12,10 +12,10 @@ CREATE TABLE comments (
 CREATE TABLE comment_likes (
                                id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                user_id BIGINT NOT NULL,
-                               post_id BIGINT NOT NULL,
+                               comment_id BIGINT NOT NULL,
                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                               FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE,
-                               FOREIGN KEY (post_id) REFERENCES POSTS(id) ON DELETE CASCADE
+                               FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                               FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE COMMENT_LIKES
