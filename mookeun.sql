@@ -7,7 +7,7 @@ CREATE TABLE comments(
     modified_at timestamp default current_timestamp on update current_timestamp,
     foreign key (post_id) references users(user_id) on delete  cascade,
     foreign key (parent_id) references comments(id) on delete cascade
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table comment_likes(
     id int auto_increment primary key,
@@ -16,7 +16,7 @@ create table comment_likes(
     created_at timestamp default current_timestamp,
     foreign key (user_id) references users(user_id) on delete cascade,
     foreign key (post_id) references posts(id) on delete cascade
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE comment_likes
     ADD CONSTRAINT unique_user_post
