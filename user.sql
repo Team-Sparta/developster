@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    user_id BIGINT AUTO_INCREMENT PRIMARY KEY ,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY ,
     email VARCHAR(20) NOT NULL UNIQUE ,
     name VARCHAR(10) NOT NULL ,
     password VARCHAR(20) NOT NULL ,
@@ -12,7 +12,7 @@ CREATE TABLE follows (
     user_id BIGINT NOT NULL ,
     followed_user_id BIGINT NOT NULL ,
     followed_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) references users (user_id),
-    FOREIGN KEY (followed_user_id) references users (user_id),
+    FOREIGN KEY (user_id) references users (id),
+    FOREIGN KEY (followed_user_id) references users (id),
     UNIQUE KEY follow (user_id,followed_user_id)
 );
