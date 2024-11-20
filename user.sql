@@ -1,3 +1,4 @@
+drop table if exists users;
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY ,
     email VARCHAR(20) NOT NULL UNIQUE ,
