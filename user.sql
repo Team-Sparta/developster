@@ -3,7 +3,9 @@ CREATE TABLE users (
     email VARCHAR(20) NOT NULL UNIQUE ,
     name VARCHAR(10) NOT NULL ,
     password VARCHAR(20) NOT NULL ,
-    bio VARCHAR(50)
+    bio VARCHAR(50),
+    role ENUM('role_admin', 'role_user') DEFAULT 'role_user',
+    status ENUM('blocked', 'active', 'inactive', 'withdrawal') DEFAULT 'active'
 );
 
 
