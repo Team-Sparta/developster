@@ -5,9 +5,5 @@ import lombok.Getter;
 @Getter
 public class NotificationRequestDto {
 
-    private final Boolean isRead;
-
-    public NotificationRequestDto(Boolean isRead) {
-        this.isRead = isRead;
-    }
+    private final Boolean isRead = false;
 }

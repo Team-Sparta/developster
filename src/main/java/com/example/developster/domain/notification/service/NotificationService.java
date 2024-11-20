@@ -2,16 +2,16 @@ package com.example.developster.domain.notification.service;
 
 import com.example.developster.domain.notification.dto.NotificationResponseDto;
 import com.example.developster.domain.notification.entity.Notification;
+import com.example.developster.domain.notification.enums.NotificationType;
 import com.example.developster.domain.notification.repository.NotificationRepository;
+import com.example.developster.domain.post.like.repository.PostLikeJpaRepository;
+import com.example.developster.domain.user.main.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.util.List;
-
-import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
-
 
 @Service
 @RequiredArgsConstructor
@@ -19,43 +19,54 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-
+    // 전체 알림 조회
     public List<NotificationResponseDto> findAllNotification() {
 
-       return notificationRepository.findAll().stream().map(NotificationResponseDto::toDto).toList();
+        return notificationRepository.findAll().stream().map(NotificationResponseDto::toDto).toList();
     }
 
-    public void allReadNotifications(Boolean isRead) {
+    // 전체 알림 일음 처리
+    public void allReadNotifications(Long id) {
 
         List<Notification> allNotification = notificationRepository.findAll();
 
         for (Notification notification : allNotification) {
-            if (notification.getIsRead()) {
-                isRead = !isRead;
+            if (notification.getId().equals(id)) {
+                notification.setIsRead(true);
             }
         }
     }
 
-    public void readNotificationById(Long id, Boolean isRead) {
-
+    // 특정 알림 읽음 처리
+    public void readNotificationById(Long id, Long userId) {
         Notification notification = notificationRepository.findByIdOrElseThrow(id);
-
-        if (notification.getIsRead()) {
-            isRead = !isRead;
-        }
+        notification.validateScheduleWriter(userId);
+        notification.setIsRead(true);
     }
 
-    public void deleteNotification(Long id) {
+    // 특정 알림 삭제
+    public void deleteNotification(Long id, Long userId) {
 
-        if (id == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 아이디값입니다." + id);
-        }
+        Notification notification = notificationRepository.findByIdOrElseThrow(id);
+        notification.validateScheduleWriter(userId);
 
         notificationRepository.deleteById(id);
     }
 
+    // 전체 알림 삭제
     public void deleteAllNotification() {
-
         notificationRepository.deleteAll();
+    }
+
+
+    public void saveNotification(User user, String relatedUrl, String message, NotificationType type) {
+        Notification newNotification = Notification.builder()
+                .user(user)
+                .message(message)
+                .relatedUrl(relatedUrl)
+                .type(type)
+                .build();
+
+        notificationRepository.save(newNotification);
     }
 }
