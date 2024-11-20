@@ -22,7 +22,7 @@ import java.util.Objects;
 public class CommentService {
     private final CommentRepository commentRepository;
 
-    public CommentCreateResDto createComment(CommentCreateReqDto dto, Long postId, User loginUser) {
+    public CommentCreateResponseDto createComment(CommentCreateRequestDto dto, Long postId, User loginUser) {
         //게시글 아이디에 맞는 게시글을 찾는다.
         Post post = new Post();
         //dto의 parentId를 바탕으로 가져온 comment 세팅
@@ -39,19 +39,20 @@ public class CommentService {
 
         Comment savedComment = commentRepository.save(newComment);
 
-        return new CommentCreateResDto(savedComment);
+        return new CommentCreateResponseDto(savedComment);
     }
 
     public CommentSummariesDetail readComments(Long postId, Long lastId, int size) {
         Pageable pageable = PageRequest.of(0, size);
 
-        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
         if (lastId == null) {
             lastId = Long.MAX_VALUE;
         }
 
+        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
+
         List<Comment> comments = commentRepository.readComments(postId, lastId, pageable);
-        List<CommentReadResDto> dtoList = comments.stream().map(CommentReadResDto::new).toList();
+        List<CommentReadResponseDto> dtoList = comments.stream().map(CommentReadResponseDto::new).toList();
 
         boolean isLast = comments.size() < size;
 
@@ -67,14 +68,14 @@ public class CommentService {
         }
 
         List<Comment> comments = commentRepository.readReplies(commentId,lastId,pageable);
-        List<CommentReadResDto> dtoList = comments.stream().map(CommentReadResDto::new).toList();
+        List<CommentReadResponseDto> dtoList = comments.stream().map(CommentReadResponseDto::new).toList();
 
         boolean isLast = comments.size() < size;
         return new RepliesSummariesDetail(isFirst,isLast,size,dtoList);
     }
 
 
-    public CommentUpdateResDto updateComment(Long commentId, User loginUser, CommentUpdateReqDto dto) {
+    public CommentUpdateResponseDto updateComment(Long commentId, User loginUser, CommentUpdateRequestDto dto) {
         //요청을 보낸 유저가 작성한 코멘트가 맞는지 확인
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
         Long writerId = comment.getUser().getId();
@@ -85,7 +86,7 @@ public class CommentService {
         }
         comment.setContents(dto.getContents());
 
-        return new CommentUpdateResDto(comment.getId());
+        return new CommentUpdateResponseDto(comment.getId());
     }
 
     public void deleteComment(Long commentId, User loginUser) {

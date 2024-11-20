@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class CommentCreateResDto {
+public class CommentCreateResponseDto {
     private final Long postId;
     private final Long parentId;
     private final Long commentId;
@@ -16,7 +16,7 @@ public class CommentCreateResDto {
     private final LocalDateTime createAt;
 
 
-    public CommentCreateResDto(Long postId, Long parentId, Long commentId, String contents, String writer,LocalDateTime createAt) {
+    public CommentCreateResponseDto(Long postId, Long parentId, Long commentId, String contents, String writer, LocalDateTime createAt) {
         this.postId = postId;
         this.parentId = parentId;
         this.commentId = commentId;
@@ -25,7 +25,7 @@ public class CommentCreateResDto {
         this.createAt = createAt;
     }
 
-    public CommentCreateResDto(Comment comment){
+    public CommentCreateResponseDto(Comment comment){
         this.postId = comment.getPost().getId();
         this.parentId = comment.getParentComment().getId();
         this.commentId = comment.getId();
