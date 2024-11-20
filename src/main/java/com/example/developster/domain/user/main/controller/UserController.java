@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<CommonResponse<UserResponsDto>> signUpUser(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@RequestBody UserRequestDto userRequestDto){
 
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, userService.createUser(userRequestDto));
     }
