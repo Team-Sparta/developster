@@ -1,13 +1,13 @@
 package com.example.developster.domain.post.comment.main.controller;
 
-import com.example.developster.domain.post.comment.main.dto.CommentUpdateReqDto;
-import com.example.developster.domain.post.comment.main.dto.CommentUpdateResDto;
+import com.example.developster.domain.post.comment.main.dto.CommentUpdateRequestDto;
+import com.example.developster.domain.post.comment.main.dto.CommentUpdateResponseDto;
 import com.example.developster.domain.post.comment.main.dto.summary.CommentsSummaries;
 import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetail;
 import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummaries;
 import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetail;
-import com.example.developster.domain.post.comment.main.dto.CommentCreateReqDto;
-import com.example.developster.domain.post.comment.main.dto.CommentCreateResDto;
+import com.example.developster.domain.post.comment.main.dto.CommentCreateRequestDto;
+import com.example.developster.domain.post.comment.main.dto.CommentCreateResponseDto;
 import com.example.developster.domain.post.comment.main.service.CommentService;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;
@@ -25,13 +25,13 @@ public class CommentController{
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<CommonResponse<CommentCreateResDto>> createComment(
+    public ResponseEntity<CommonResponse<CommentCreateResponseDto>> createComment(
             @PathVariable Long postId,
-            @RequestBody CommentCreateReqDto dto,
+            @RequestBody CommentCreateRequestDto dto,
             @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
 
-        CommentCreateResDto resDto =  commentService.createComment(dto,postId, loginUser);
+        CommentCreateResponseDto resDto =  commentService.createComment(dto,postId, loginUser);
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT,resDto);
     }
 
@@ -60,12 +60,12 @@ public class CommentController{
 
     //댓글,답글 수정
     @PutMapping("/{commentId}")
-    public ResponseEntity<CommonResponse<CommentUpdateResDto>> updateComment(
+    public ResponseEntity<CommonResponse<CommentUpdateResponseDto>> updateComment(
             @PathVariable Long commentId,
             @SessionAttribute(AuthConstants.LOGIN_USER) User user,
-            @RequestBody CommentUpdateReqDto dto
+            @RequestBody CommentUpdateRequestDto dto
     ){
-        CommentUpdateResDto resDto = commentService.updateComment(commentId,user,dto);
+        CommentUpdateResponseDto resDto = commentService.updateComment(commentId,user,dto);
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, resDto);
     }
 
@@ -75,7 +75,6 @@ public class CommentController{
             @PathVariable Long commentId,
             @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
-
         commentService.deleteComment(commentId, loginUser);
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE);
     }

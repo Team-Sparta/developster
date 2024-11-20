@@ -24,4 +24,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("SELECT c FROM Comment c WHERE c.parentComment.id = :commentId AND c.deletedAt IS NULL AND c.id < :lastId ORDER BY c.createdAt DESC")
     List<Comment> readReplies(Long commentId, Long lastId, Pageable pageable);
+
+
 }

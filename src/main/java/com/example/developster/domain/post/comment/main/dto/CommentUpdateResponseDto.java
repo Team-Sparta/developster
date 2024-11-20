@@ -1,9 +1,9 @@
 package com.example.developster.domain.post.comment.main.dto;
 
-public class CommentUpdateResDto {
+public class CommentUpdateResponseDto {
     private final Long commentId;
 
-    public CommentUpdateResDto(Long commentId) {
+    public CommentUpdateResponseDto(Long commentId) {
         this.commentId = commentId;
     }
 }
