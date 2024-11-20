@@ -46,7 +46,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<CommonResponse<PostSummary>> loadPost(
+public ResponseEntity<CommonResponse<PostSummary>> loadPost(
             @PathVariable Long postId
     ) {
         return CommonResponse.success(SuccessCode.SUCCESS, postService.loadPost(postId));

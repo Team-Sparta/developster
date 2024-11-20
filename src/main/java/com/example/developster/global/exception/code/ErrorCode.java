@@ -44,6 +44,21 @@ public enum ErrorCode {
     INVALID_REPEAT_TYPE(HttpStatus.BAD_REQUEST, "잘못된 일정 주기 입력입니다"),
     NOT_POST_WRITER(HttpStatus.UNAUTHORIZED, "게시물 작성자가 아닙니다."),
 
+
+    /**
+     * Post Like
+     */
+    ALREADY_LIKED_POST(HttpStatus.BAD_REQUEST, "이미 좋아요를 한 게시글 입니다."),
+    NOT_FOUND_POST_LIKE(HttpStatus.BAD_REQUEST, "아직 좋아요를 하지 않았습니다."),
+
+    /**
+     * Post Bookmark
+     */
+    ALREADY_BOOKMARKED_POST(HttpStatus.BAD_REQUEST, "이미 저장을 한 게시글 입니다."),
+    NOT_FOUND_POST_BOOKMARK(HttpStatus.BAD_REQUEST, "아직 저장을 하지 않았습니다."),
+
+
+
     /**
      * Comment
      */
