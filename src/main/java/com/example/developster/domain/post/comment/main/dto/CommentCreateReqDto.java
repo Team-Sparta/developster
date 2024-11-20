@@ -10,7 +10,7 @@ public class CommentCreateReqDto {
     private final String contents;
 
     public CommentCreateReqDto(Comment comment){
-        this.parentId = comment.getComment().getId();
+        this.parentId = comment.getParentComment().getId();
         this.contents = comment.getContents();
     }
 }
