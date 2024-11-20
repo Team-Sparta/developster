@@ -11,11 +11,11 @@ import lombok.Getter;
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
-    public enum role {
+    public enum Role {
         ROLE_ADMIN, ROLE_USER;
     }
 
-    public enum status {
+    public enum Status {
         BLOCKED, ACTIVE, INACTIVE, WITHDRAWAL;
     }
 
@@ -39,11 +39,11 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'active'")
-    status status;
+    Status status;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'role_admin'")
-    role role;
+    Role role;
 
     @Builder
     public User(String name, String email, String password, String bio){
@@ -51,6 +51,9 @@ public class User extends BaseTimeEntity {
         this.email = email;
         this.password = password;
         this.bio = bio;
+
+        this.role = Role.ROLE_ADMIN;
+        this.status = Status.ACTIVE;
     }
 
 
