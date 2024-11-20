@@ -37,12 +37,12 @@ public enum ErrorCode {
     EXIST_USERNAME(HttpStatus.BAD_REQUEST, "중복된 이름입니다."),
 
     /**
-     * Schedule
+     * Post
      */
-    NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "스케줄 정보를 찾을 수 없습니다."),
-    ALREADY_DELETED_SCHEDULE(HttpStatus.BAD_REQUEST, "이미 삭제된 스케줄 입니다."),
+    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "게시물 정보를 찾을 수 없습니다."),
+    ALREADY_DELETED_POST(HttpStatus.BAD_REQUEST, "이미 삭제된 게시물 입니다."),
     INVALID_REPEAT_TYPE(HttpStatus.BAD_REQUEST, "잘못된 일정 주기 입력입니다"),
-    NOT_SCHEDULE_WRITER(HttpStatus.UNAUTHORIZED, "스케줄 작성자가 아닙니다."),
+    NOT_POST_WRITER(HttpStatus.UNAUTHORIZED, "게시물 작성자가 아닙니다."),
 
     /**
      * Comment
