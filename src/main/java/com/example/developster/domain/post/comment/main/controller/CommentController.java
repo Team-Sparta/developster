@@ -9,6 +9,7 @@ import com.example.developster.domain.post.comment.main.dto.summary.RepliesSumma
 import com.example.developster.domain.post.comment.main.dto.CommentCreateReqDto;
 import com.example.developster.domain.post.comment.main.dto.CommentCreateResDto;
 import com.example.developster.domain.post.comment.main.service.CommentService;
+import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;
 import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
@@ -27,10 +28,10 @@ public class CommentController{
     public ResponseEntity<CommonResponse<CommentCreateResDto>> createComment(
             @PathVariable Long postId,
             @RequestBody CommentCreateReqDto dto,
-            @SessionAttribute(AuthConstants.LOGIN_USER) Long loginId
+            @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
 
-        CommentCreateResDto resDto =  commentService.createComment(dto,postId, loginId);
+        CommentCreateResDto resDto =  commentService.createComment(dto,postId, loginUser);
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT,resDto);
     }
 
@@ -62,10 +63,10 @@ public class CommentController{
     @PutMapping("/{commentId}")
     public ResponseEntity<CommonResponse<CommentUpdateResDto>> updateComment(
             @PathVariable Long commentId,
-            @SessionAttribute(AuthConstants.LOGIN_USER) Long loginId,
+            @SessionAttribute(AuthConstants.LOGIN_USER) User user,
             @RequestBody CommentUpdateReqDto dto
     ){
-        CommentUpdateResDto resDto = commentService.updateComment(commentId,loginId,dto);
+        CommentUpdateResDto resDto = commentService.updateComment(commentId,user,dto);
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, resDto);
     }
 
@@ -73,11 +74,10 @@ public class CommentController{
     @DeleteMapping("/{commentId}")
     public ResponseEntity<CommonResponse<Void>> deleteComment(
             @PathVariable Long commentId,
-            @SessionAttribute(AuthConstants.LOGIN_USER) Long loginId
+            @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
 
-        commentService.deleteComment(commentId, loginId);
+        commentService.deleteComment(commentId, loginUser);
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE);
     }
-
 }

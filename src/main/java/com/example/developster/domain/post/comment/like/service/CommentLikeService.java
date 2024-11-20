@@ -12,10 +12,8 @@ public class CommentLikeService {
     private final CommentLikeRepository likeRepository;
 
     public void likeComment(Long commentId, User user) {
-
     }
 
     public void unlikeComment(Long commentId, User user) {
-
     }
 }

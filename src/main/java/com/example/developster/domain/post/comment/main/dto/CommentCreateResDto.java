@@ -1,6 +1,7 @@
 package com.example.developster.domain.post.comment.main.dto;
 
 
+import com.example.developster.domain.post.comment.main.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -22,5 +23,14 @@ public class CommentCreateResDto {
         this.contents = contents;
         this.writer = writer;
         this.createAt = createAt;
+    }
+
+    public CommentCreateResDto(Comment comment){
+        this.postId = comment.getPost().getId();
+        this.parentId = comment.getComment().getId();
+        this.commentId = comment.getId();
+        this.contents = comment.getContents();
+        this.writer = comment.getUser().getName();
+        this.createAt = comment.getCreatedAt();
     }
 }

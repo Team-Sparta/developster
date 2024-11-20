@@ -1,5 +1,6 @@
 package com.example.developster.domain.post.comment.main.dto;
 
+import com.example.developster.domain.post.comment.main.entity.Comment;
 import lombok.Getter;
 
 @Getter
@@ -12,5 +13,10 @@ public class CommentReadResDto {
         this.postId = postId;
         this.commentId = commentId;
         this.contents = contents;
+    }
+    public CommentReadResDto(Comment comment){
+        this.postId = comment.getPost().getId();
+        this.commentId = comment.getId();
+        this.contents = comment.getContents();
     }
 }
