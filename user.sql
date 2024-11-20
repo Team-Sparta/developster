@@ -11,7 +11,6 @@ CREATE TABLE users (
     deleted_at DATETIME DEFAULT NULL
 );
 
-
 CREATE TABLE follows (
     id BIGINT AUTO_INCREMENT PRIMARY KEY ,
     user_id BIGINT NOT NULL ,
