@@ -22,9 +22,11 @@ import java.time.LocalDateTime;
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column( columnDefinition = "BIGINT UNSIGNED comment '댓글 고유 번호'")
     private Long id;
 
     @Setter
+    @Column()
     private String contents;
 
     @ManyToOne
@@ -33,7 +35,7 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    private Comment comment;
+    private Comment parentComment;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -44,7 +46,7 @@ public class Comment extends BaseTimeEntity {
         this.contents =contents;
         this.user = user;
         this.post = post;
-        this.comment = comment;
+        this.parentComment = comment;
     }
 
     public void delete() {

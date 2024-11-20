@@ -45,6 +45,7 @@ public class CommentService {
     public CommentSummariesDetail readComments(Long postId, Long lastId, int size) {
         Pageable pageable = PageRequest.of(0, size);
 
+        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
         if (lastId == null) {
             lastId = Long.MAX_VALUE;
         }
@@ -52,11 +53,24 @@ public class CommentService {
         List<Comment> comments = commentRepository.readComments(postId, lastId, pageable);
         List<CommentReadResDto> dtoList = comments.stream().map(CommentReadResDto::new).toList();
 
-        return new CommentSummariesDetail()
+        boolean isLast = comments.size() < size;
+
+        return new CommentSummariesDetail(isFirst,isLast,size,dtoList);
     }
 
-    public RepliesSummariesDetail readReplies(Long postId, Long commentId, Long lastId, int size) {
-        return null;
+    public RepliesSummariesDetail readReplies(Long commentId, Long lastId, int size) {
+        Pageable pageable = PageRequest.of(0,size);
+
+        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
+        if (lastId == null) {
+            lastId = Long.MAX_VALUE;
+        }
+
+        List<Comment> comments = commentRepository.readReplies(commentId,lastId,pageable);
+        List<CommentReadResDto> dtoList = comments.stream().map(CommentReadResDto::new).toList();
+
+        boolean isLast = comments.size() < size;
+        return new RepliesSummariesDetail(isFirst,isLast,size,dtoList);
     }
 
 

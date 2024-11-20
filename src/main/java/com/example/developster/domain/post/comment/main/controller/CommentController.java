@@ -50,12 +50,11 @@ public class CommentController{
     //답글 조회
     @GetMapping("/{commentId}")
     public ResponseEntity<CommonResponse<RepliesSummaries>> readReplies(
-            @PathVariable Long postId,
             @PathVariable Long commentId,
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int size
     ){
-        RepliesSummariesDetail resDetail =  commentService.readReplies(postId,commentId,lastId,size);
+        RepliesSummariesDetail resDetail =  commentService.readReplies(commentId,lastId,size);
         return CommonResponse.success(SuccessCode.SUCCESS, new RepliesSummaries(resDetail));
     }
 
