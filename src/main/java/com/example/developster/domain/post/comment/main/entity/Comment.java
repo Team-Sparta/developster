@@ -1,5 +1,6 @@
 package com.example.developster.domain.post.comment.main.entity;
 
+import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
