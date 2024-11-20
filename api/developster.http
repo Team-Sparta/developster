@@ -1,0 +1,19 @@
+### 회원 가입
+POST http://localhost:8080/users/sign-up
+Content-Type: application/json
+
+{
+  "name": "김영준",
+  "email": "youngjun@gmail.com",
+  "profile": "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg",
+  "password": "12345678",
+  "bio": "hey what's up"
+}
+
+### 로그인
+POST http://localhost:8080/login
+Content-Type: application/json
+
+### Delete all User
+DELETE http://localhost:8080/api/user
+Content-Type: application/json

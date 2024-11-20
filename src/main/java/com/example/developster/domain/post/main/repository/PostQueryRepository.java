@@ -5,7 +5,6 @@ import com.example.developster.domain.post.like.entity.QPostLike;
 import com.example.developster.domain.post.main.dto.PostDetailInfo;
 import com.example.developster.domain.post.main.entity.QPost;
 import com.example.developster.domain.post.main.enums.PostOrderType;
-import com.example.developster.domain.post.media.entity.QMedia;
 import com.example.developster.domain.user.main.dto.UserInfoDto;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.exception.InvalidParamException;
@@ -129,14 +128,9 @@ public class PostQueryRepository {
     }
 
     private OrderSpecifier<?> getOrderSpecifier(PostOrderType orderType) {
-        switch (orderType) {
-            case LIKE_COUNT:
-                return postLike.count().desc();
-            case CREATED_DATE:
-            default:
-                return post.id.desc(); // Default to ordering by created date
-        }
+        return switch (orderType) {
+            case LIKE_COUNT -> postLike.count().desc();
+            default -> post.id.desc(); // Default to ordering by created date
+        };
     }
-
-
 }
