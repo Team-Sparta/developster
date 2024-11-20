@@ -20,5 +20,5 @@ CREATE TABLE follows
     followed_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (followed_user_id) REFERENCES users (id),
-    UNIQUE KEY follow (user_id, followed_user_id)
+    UNIQUE KEY follow (user_id,followed_user_id)
 );
