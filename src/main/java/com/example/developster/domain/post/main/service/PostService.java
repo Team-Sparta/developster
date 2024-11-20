@@ -7,15 +7,21 @@ import com.example.developster.domain.post.main.dto.response.PostListResponse;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.post.main.enums.PostOrderType;
 import com.example.developster.domain.post.main.repository.PostJpaRepository;
+import com.example.developster.domain.post.media.entity.Media;
+import com.example.developster.domain.post.media.repository.MediaJpaRepository;
 import com.example.developster.domain.user.main.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
 public class PostService {
 
     private final PostJpaRepository postRepository;
+    private final MediaJpaRepository mediaRepository;
 
     public PostIdResponse createPost(User user, WritePostRequest request) {
         Post newPost = Post.builder()
@@ -25,12 +31,15 @@ public class PostService {
                 .isPrivate(request.getIsPrivate())
                 .build();
 
+
         Post save = postRepository.save(newPost);
+
+        storeImageList(request.getImageUrls(), save);
+
         return new PostIdResponse(save.getId());
     }
 
     public PostListResponse loadPostList(Integer lastPostId, Integer size, PostOrderType orderType) {
-
         return null;
     }
 
@@ -59,7 +68,18 @@ public class PostService {
     }
 
     public PostListResponse loadMyPostList(Long userId, Integer lastPostId, Integer size, PostOrderType orderType) {
-
         return null;
+    }
+
+    private void storeImageList(
+            final List<String> imageUrls,
+            final Post post
+    ) {
+
+        for (String imageUrl : imageUrls) {
+            Media media = Media.create(post, imageUrl);
+            mediaRepository.save(media);
+        }
+
     }
 }

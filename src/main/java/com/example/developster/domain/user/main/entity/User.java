@@ -60,6 +60,4 @@ public class User extends BaseTimeEntity {
     @Builder
     public User() {
     }
-
-
 }
