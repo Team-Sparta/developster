@@ -35,6 +35,8 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER(HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다."),
     EXIST_EMAIL(HttpStatus.BAD_REQUEST, "중복된 이메일입니다."),
     EXIST_USERNAME(HttpStatus.BAD_REQUEST, "중복된 이름입니다."),
+    WRONG_CONDITION_PASSWORD(HttpStatus.BAD_REQUEST, "영문, 숫자, 특수문자를 최소 1글자씩 포함해야 하며 8글자 이상이어야 합니다."),
+    WRONG_CONDITION_EMAIL(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 이메일입니다."),
 
     /**
      * Post
