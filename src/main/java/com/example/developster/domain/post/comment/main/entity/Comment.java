@@ -3,10 +3,15 @@ package com.example.developster.domain.post.comment.main.entity;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.entity.BaseTimeEntity;
+import com.example.developster.global.exception.InvalidParamException;
+import com.example.developster.global.exception.code.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,8 +22,11 @@ import lombok.NoArgsConstructor;
 public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column( columnDefinition = "BIGINT UNSIGNED comment '댓글 고유 번호'")
     private Long id;
 
+    @Setter
+    @Column()
     private String contents;
 
     @ManyToOne
@@ -27,7 +35,7 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    private Comment comment;
+    private Comment parentComment;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -38,6 +46,13 @@ public class Comment extends BaseTimeEntity {
         this.contents =contents;
         this.user = user;
         this.post = post;
-        this.comment = comment;
+        this.parentComment = comment;
+    }
+
+    public void delete() {
+        if (this.deletedAt != null) {
+            throw new InvalidParamException(ErrorCode.ALREADY_DELETED_POST);
+        }
+        this.deletedAt = LocalDateTime.now();
     }
 }

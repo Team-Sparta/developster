@@ -1,4 +1,4 @@
-package com.example.developster.domain.post.comment.main;
+package com.example.developster.domain.post.comment.main.dto.summary;
 
 import com.example.developster.domain.post.comment.main.dto.CommentReadResDto;
 import lombok.Getter;
