@@ -20,12 +20,12 @@ public class User extends BaseTimeEntity {
     }
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "BIGINT UNSIGNED comment '회원 고유 번호'")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, columnDefinition = "varchar(255) comment '이메일'")
     String email;
 
     @Column(nullable = false)
@@ -46,7 +46,7 @@ public class User extends BaseTimeEntity {
     Role role;
 
     @Builder
-    public User(String name, String email, String password, String bio){
+    public User(String name, String email, String password, String bio) {
         this.name = name;
         this.email = email;
         this.password = password;
