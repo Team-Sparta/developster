@@ -37,6 +37,9 @@ public class User extends BaseTimeEntity {
     @Column
     String bio;
 
+    @Column
+    String profile;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'active'")
     Status status;
@@ -46,11 +49,12 @@ public class User extends BaseTimeEntity {
     Role role;
 
     @Builder
-    public User(String name, String email, String password, String bio) {
+    public User(String name, String email, String password, String bio, String profile) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.bio = bio;
+        this.profile = profile;
 
         this.role = Role.ROLE_ADMIN;
         this.status = Status.ACTIVE;
