@@ -16,7 +16,7 @@ public class MediaQueryRepository {
 
     QMedia media = QMedia.media;
 
-    public List<String> getImageUrlList(Long postId) {
+    public List<String> getUrlList(Long postId) {
         return jpaQueryFactory
                 .select(media.url)
                 .from(media)

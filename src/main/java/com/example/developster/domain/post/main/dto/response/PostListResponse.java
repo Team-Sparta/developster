@@ -1,9 +1,9 @@
 package com.example.developster.domain.post.main.dto.response;
 
-import com.example.developster.domain.post.main.dto.PostSummary;
+import com.example.developster.domain.post.main.dto.PostDetailInfo;
 import org.springframework.data.domain.Slice;
 
 public record PostListResponse (
-       Slice<PostSummary> posts
+       Slice<PostDetailInfo> posts
 ) {
 }

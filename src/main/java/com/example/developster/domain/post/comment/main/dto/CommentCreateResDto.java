@@ -27,7 +27,7 @@ public class CommentCreateResDto {
 
     public CommentCreateResDto(Comment comment){
         this.postId = comment.getPost().getId();
-        this.parentId = comment.getComment().getId();
+        this.parentId = comment.getParentComment().getId();
         this.commentId = comment.getId();
         this.contents = comment.getContents();
         this.writer = comment.getUser().getName();
