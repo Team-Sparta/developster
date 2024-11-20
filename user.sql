@@ -6,9 +6,9 @@ CREATE TABLE users (
     bio VARCHAR(50),
     role ENUM('role_admin', 'role_user') DEFAULT 'role_user',
     status ENUM('blocked', 'active', 'inactive', 'withdrawal') DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME DEFAULT NULL
 );
 
 
