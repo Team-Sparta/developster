@@ -26,6 +26,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.querydsl.core.types.ConstructorExpression;
 
 @Slf4j
 @Repository
@@ -76,7 +79,7 @@ public class PostQueryRepository {
                 .orElseThrow(() -> new InvalidParamException(ErrorCode.NOT_FOUND_POST));
     }
 
-    public Slice<Postesponse> getAllPosts(User user, Long lastPostId, int pageSize, PostOrderType orderType) {
+    public Slice<PostResponse> getAllPosts(User user, Long lastPostId, int pageSize, PostOrderType orderType) {
         List<PostDetailInfo> postDetailList = jpaQueryFactory
                 .select(
                         Projections.constructor(

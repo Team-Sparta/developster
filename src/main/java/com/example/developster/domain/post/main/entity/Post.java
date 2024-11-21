@@ -10,12 +10,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@BatchSize(size = 10)
 @Table(
         name = "posts"
 )
@@ -25,7 +27,7 @@ public class Post extends BaseTimeEntity {
     @Column(name = "id", columnDefinition = "BIGINT UNSIGNED comment '스케줄 고유 번호'")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false, columnDefinition = "BIGINT UNSIGNED comment '회원 고유 번호'")
     private User user;
 
@@ -65,4 +67,11 @@ public class Post extends BaseTimeEntity {
             throw new InvalidParamException(ErrorCode.NOT_POST_WRITER);
         }
     }
+
+    public void reverseValidatePostWriter(Long userId) {
+        if (userId.equals(this.user.getId())) {
+            throw new InvalidParamException(ErrorCode.CONSTRAINT_VIOLATION);
+        }
+    }
+
 }

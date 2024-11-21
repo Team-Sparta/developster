@@ -23,6 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<CommonResponse<String>> handle(RuntimeException e) {
         log.error("RuntimeException : {}", e.getMessage());
+        log.error("RuntimeException: {} ", (Object) e.getStackTrace());
         return CommonResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 

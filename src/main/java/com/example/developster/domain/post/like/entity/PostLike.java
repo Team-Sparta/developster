@@ -4,6 +4,7 @@ import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.entity.BaseCreatedTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -12,7 +13,11 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(
-        name = "post_likes"
+        name = "post_likes",
+        indexes = {
+                @Index(name = "idx_post_id", columnList = "post_id"),
+                @Index(name = "idx_user_id", columnList = "user_id"),
+        }
 )
 public class PostLike extends BaseCreatedTimeEntity {
     @Id
@@ -29,14 +34,14 @@ public class PostLike extends BaseCreatedTimeEntity {
     private Post post;
 
     @Setter
-    @Column(name = "is_like", nullable = false)
-    Boolean isLike = true;
+    @Column(name = "is_liked", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE comment '게시물 좋아요 여부'")
+    private Boolean isLiked = true;
 
-    public static PostLike create(User user, Post post, Boolean isLike) {
+    public static PostLike create(@NotNull User user, @NotNull Post post, @NotNull Boolean isLiked) {
         return PostLike.builder()
                 .user(user)
                 .post(post)
-                .isLike(isLike)
+                .isLiked(isLiked)
                 .build();
     }
 }
