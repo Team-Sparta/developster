@@ -15,6 +15,9 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     default Comment findByIdOrElseThrow(Long id){
+        if(id == null){
+            return null;
+        }
         return findById(id).orElseThrow(() -> new BaseException(ErrorCode.NOT_FOUND_COMMENT));
     }
 

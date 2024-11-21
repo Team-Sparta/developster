@@ -10,7 +10,7 @@ public class UserResponseDto {
     private final String name;
     private final String email;
     private final String bio;
-    private final String prifile;
+    private final String profile;
 
     @Builder
     public UserResponseDto(Long id, String name, String email, String bio, String profile) {
@@ -18,7 +18,7 @@ public class UserResponseDto {
         this.name = name;
         this.email = email;
         this.bio = bio;
-        this.prifile = profile;
+        this.profile = profile;
     }
 
     public static UserResponseDto toDto(User user) {
