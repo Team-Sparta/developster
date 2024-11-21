@@ -24,10 +24,11 @@ public enum ErrorCode {
     NO_SUCH_METHOD(HttpStatus.BAD_REQUEST, "메소드를 찾을 수 없습니다."),
 
     /**
-     * AAuthentication
+     * Authentication
      */
     UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "로그인을 해주세요."),
     INVALID_AUTHENTICATION(HttpStatus.BAD_REQUEST, "인증이 올바르지 않습니다."),
+
 
     /**
      * User

@@ -12,9 +12,12 @@ import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,14 +34,28 @@ public class PostController {
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, postService.createPost(user, requestDto));
     }
 
+    /**
+     * Fetch newsfeed posts with optional sorting and date range filtering.
+     *
+     * @param lastPostId Optional lastPostId for indexing (1)
+     * @param pageSize   Required page size for filtering (10)
+     * @param startDate  Optional start date for ordering (yyyy-MM-dd)
+     * @param endDate    Optional end date for ordering (yyyy-MM-dd)
+     * @param orderBy    Optional Sorting criteria: "UPDATED_DATE" or "LIKE_COUNT"
+     * @return List of PostResponse
+     */
     @GetMapping
     public ResponseEntity<CommonResponse<PostListResponse>> loadPostList(
             @RequestParam(required = false) Long lastPostId,
             @RequestParam Integer pageSize,
             @RequestParam(required = false) PostOrderType orderBy,
+            @RequestParam(value = "startDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
     ) {
-        return CommonResponse.success(SuccessCode.SUCCESS, postService.loadPostList(user, lastPostId, pageSize, orderBy));
+        return CommonResponse.success(SuccessCode.SUCCESS, postService.loadPostList(user, lastPostId, pageSize, orderBy, startDate, endDate));
     }
 
     @GetMapping("/{postId}")

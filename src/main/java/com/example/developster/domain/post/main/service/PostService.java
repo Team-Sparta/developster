@@ -1,7 +1,6 @@
 package com.example.developster.domain.post.main.service;
 
 import com.example.developster.domain.post.main.dto.PostDetailInfo;
-import com.example.developster.domain.post.main.dto.PostSummary;
 import com.example.developster.domain.post.main.dto.request.WritePostRequest;
 import com.example.developster.domain.post.main.dto.response.PostIdResponse;
 import com.example.developster.domain.post.main.dto.response.PostListResponse;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -46,10 +46,8 @@ public class PostService {
         return new PostIdResponse(save.getId());
     }
 
-    public PostListResponse loadPostList(User user, Long lastPostId, Integer pageSize, PostOrderType orderType) {
-        Slice<PostResponse> allPosts = postQueryRepository.getAllPosts(user, lastPostId, pageSize, orderType);
-
-
+    public PostListResponse loadPostList(User user, Long lastPostId, Integer pageSize, PostOrderType orderType, LocalDate startDate, LocalDate endDate) {
+        Slice<PostResponse> allPosts = postQueryRepository.getAllPosts(user, lastPostId, pageSize, orderType, startDate, endDate);
 
         return new PostListResponse(allPosts);
     }
