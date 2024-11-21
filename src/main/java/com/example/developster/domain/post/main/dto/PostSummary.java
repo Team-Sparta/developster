@@ -32,7 +32,7 @@ public class PostSummary {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())
-                .author(new UserInfoDto(user.getName(), user.getProfile(), user.getId()))
+                .author(new UserInfoDto(user.getId(),user.getName(),user.getProfile()))
                 .build();
     }
 }
