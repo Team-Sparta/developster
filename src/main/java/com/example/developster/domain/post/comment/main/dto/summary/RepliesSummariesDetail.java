@@ -1,9 +1,11 @@
 package com.example.developster.domain.post.comment.main.dto.summary;
 
 import com.example.developster.domain.post.comment.main.dto.CommentReadResponseDto;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class RepliesSummariesDetail {
     private final boolean first;
     private final boolean last;

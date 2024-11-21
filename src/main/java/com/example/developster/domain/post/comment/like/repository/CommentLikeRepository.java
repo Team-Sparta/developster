@@ -14,8 +14,8 @@ public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> 
     Optional<CommentLike> findByComment_IdAndUser_Id(Long commentId, Long userId);
 
 
-    default void findByComment_IdAndUser_IdOrElseThrow(Long commentId, Long userId){
-        findByComment_IdAndUser_Id(commentId, userId).orElseThrow(
+    default CommentLike findByComment_IdAndUser_IdOrElseThrow(Long commentId, Long userId){
+        return findByComment_IdAndUser_Id(commentId, userId).orElseThrow(
                 () -> new BaseException(ErrorCode.NOT_FOUND_COMMENT_LIKE)
         );
     }
