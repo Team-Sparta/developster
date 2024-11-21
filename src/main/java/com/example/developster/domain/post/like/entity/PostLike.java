@@ -28,10 +28,15 @@ public class PostLike extends BaseCreatedTimeEntity {
     @JoinColumn(name = "post_id", nullable = false, columnDefinition = "BIGINT UNSIGNED comment '게시물 고유 번호'")
     private Post post;
 
-    public static PostLike create(User user, Post post) {
+    @Setter
+    @Column(name = "is_like", nullable = false)
+    Boolean isLike = true;
+
+    public static PostLike create(User user, Post post, Boolean isLike) {
         return PostLike.builder()
                 .user(user)
                 .post(post)
+                .isLike(isLike)
                 .build();
     }
 }

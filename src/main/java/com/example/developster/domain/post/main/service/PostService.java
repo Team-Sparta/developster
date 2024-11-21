@@ -58,7 +58,7 @@ public class PostService {
     }
 
     public PostIdResponse updatePost(Long userId, WritePostRequest request, Long postId) {
-        Post post = postRepository.findByIdOrElseThrow(postId);
+        Post post = postRepository.fetchPost(postId);
 
         post.validatePostWriter(userId);
         post.update(request);
@@ -67,7 +67,7 @@ public class PostService {
     }
 
     public PostIdResponse deletePost(Long userId, Long postId) {
-        Post post = postRepository.findByIdOrElseThrow(postId);
+        Post post = postRepository.fetchPost(postId);
 
         post.validatePostWriter(userId);
         post.delete();

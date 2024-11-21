@@ -8,5 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface PostLikeJpaRepository extends JpaRepository<PostLike, Long> {
+
     Optional<PostLike> findByUserAndPost(User user, Post post);
+
+    default PostLike fetchOrCreatePostLike(User user, Post post) {
+        return findByUserAndPost(user, post)
+                .orElse(PostLike.create(user, post, false));
+    }
 }
