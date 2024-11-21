@@ -20,10 +20,10 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     // 전체 알림 조회
-    public List<NotificationResponseDto> findAllNotification() {
-
-        return notificationRepository.findAll().stream().map(NotificationResponseDto::toDto).toList();
-    }
+//    public List<NotificationResponseDto> findAllNotification() {
+//
+//        return notificationRepository.findAll().stream().map(NotificationResponseDto::toDto).toList();
+//    }
 
     // 전체 알림 일음 처리
     public void allReadNotifications(Long id) {

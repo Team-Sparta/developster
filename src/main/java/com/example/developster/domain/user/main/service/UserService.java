@@ -60,7 +60,6 @@ public class UserService {
         if (user == null || matches(req.getPassword(), user.getPassword())) {
            throw new InvalidParamException(ErrorCode.INVALID_AUTHENTICATION);
         }
-
         return user;
     }
 

@@ -21,13 +21,13 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     // 전체 알림 조회
-    @GetMapping
-    public ResponseEntity<CommonResponse<List<NotificationResponseDto>>> findAllNotifications() {
-
-        List<NotificationResponseDto> allNotification = notificationService.findAllNotification();
-
-        return CommonResponse.success(SuccessCode.SUCCESS, allNotification);
-    }
+//    @GetMapping
+//    public ResponseEntity<CommonResponse<List<NotificationResponseDto>>> findAllNotifications() {
+//
+//        List<NotificationResponseDto> allNotification = notificationService.findAllNotification();
+//
+//        return CommonResponse.success(SuccessCode.SUCCESS, allNotification);
+//    }
 
     // 전체 알림 읽음 처리
     @PostMapping("/{notificationId}/read-all")
