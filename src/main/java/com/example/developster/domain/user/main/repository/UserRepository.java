@@ -1,7 +1,15 @@
 package com.example.developster.domain.user.main.repository;
+import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.main.entity.User;
+import com.example.developster.global.exception.InvalidParamException;
+import com.example.developster.global.exception.code.ErrorCode;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-     User findByEmail(String email);
+     default User findByIdOrElseThrow(Long postId) {
+          return findById(postId).orElseThrow(() -> new InvalidParamException(ErrorCode.NOT_FOUND_MEMBER));
+     }
+
+     User findByEmail(@NotNull String email);
 }
