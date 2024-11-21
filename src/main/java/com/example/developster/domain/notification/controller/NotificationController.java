@@ -63,9 +63,11 @@ public class NotificationController {
 
     // 전체 알림 삭제
     @DeleteMapping
-    public ResponseEntity<CommonResponse<Void>> deleteAllNotifications() {
+    public ResponseEntity<CommonResponse<Void>> deleteAllNotifications(
+            @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
+    ) {
 
-        notificationService.deleteAllNotification();
+        notificationService.deleteAllNotification(user.getId());
 
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE);
     }

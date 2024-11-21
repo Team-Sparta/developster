@@ -26,6 +26,7 @@ public class PostLikeService {
         if (postLike.isPresent()) {
             throw new BaseException(ErrorCode.ALREADY_LIKED_POST);
         }
+
         PostLike newPostLike = PostLike.create(user, post);
         postLikeJpaRepository.save(newPostLike);
     }
