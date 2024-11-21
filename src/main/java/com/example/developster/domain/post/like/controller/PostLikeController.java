@@ -18,7 +18,7 @@ public class PostLikeController {
     private final PostLikeService postLikeService;
 
     @PostMapping
-    public ResponseEntity<CommonResponse<Object>> likePost(
+    public ResponseEntity<CommonResponse<Void>> likePost(
             @PathVariable Long postId,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user) {
 
@@ -28,7 +28,7 @@ public class PostLikeController {
     }
 
     @DeleteMapping
-    public ResponseEntity<CommonResponse<Object>> unlikePost(
+    public ResponseEntity<CommonResponse<Void>> unlikePost(
             @PathVariable Long postId,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user) {
 
