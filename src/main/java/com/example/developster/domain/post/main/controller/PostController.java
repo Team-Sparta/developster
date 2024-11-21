@@ -35,7 +35,7 @@ public class PostController {
     }
 
     /**
-     * Fetch newsfeed posts with optional sorting and date range filtering.
+     * Fetch posts with optional sorting and date range filtering.
      *
      * @param lastPostId Optional lastPostId for indexing (1)
      * @param pageSize   Required page size for filtering (10)
