@@ -7,7 +7,6 @@ import com.example.developster.domain.notification.enums.NotificationType;
 import com.example.developster.domain.notification.repository.EmitterRepository;
 import com.example.developster.domain.notification.repository.NotificationRepository;
 import com.example.developster.domain.user.main.entity.User;
-import com.example.developster.domain.user.main.repository.UserRepository;
 import com.example.developster.global.exception.InvalidParamException;
 import com.example.developster.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +28,6 @@ public class NotificationService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
     private final NotificationRepository notificationRepository;
     private final EmitterRepository emitterRepository;
-    private final UserRepository userRepository;
 
     public SseEmitter subscribe(User user, String lastEventId) {
         Long userId = user.getId();
