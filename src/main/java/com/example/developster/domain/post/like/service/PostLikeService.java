@@ -28,13 +28,16 @@ public class PostLikeService {
     @Transactional
     public void likePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
+
+        post.reverseValidatePostWriter(user.getId());
+
         PostLike postLike = postLikeJpaRepository.fetchOrCreatePostLike(user, post);
 
-        if (postLike.getIsLike()) {
+        if (postLike.getIsLiked()) {
             throw new BaseException(ErrorCode.ALREADY_LIKED_POST);
         }
 
-        postLike.setIsLike(true);
+        postLike.setIsLiked(true);
         postLikeJpaRepository.save(postLike);
 
         if (postLike.getCreatedAt() == null) {
@@ -45,12 +48,15 @@ public class PostLikeService {
     @Transactional
     public void unlikePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
+
+        post.reverseValidatePostWriter(user.getId());
+
         Optional<PostLike> postLike = postLikeJpaRepository.findByUserAndPost(user, post);
 
-        if (postLike.isEmpty() || postLike.get().getIsLike()) {
+        if (postLike.isEmpty() || postLike.get().getIsLiked()) {
             throw new BaseException(ErrorCode.NOT_FOUND_POST_LIKE);
         }
-        postLike.get().setIsLike(false);
+        postLike.get().setIsLiked(false);
     }
 
     /**

@@ -42,7 +42,6 @@ public class CommentController{
             @PathVariable Long postId,
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int size
-
     ){
         CommentSummariesDetail resDetail = commentService.readComments(postId,lastId, size);
         return CommonResponse.success(SuccessCode.SUCCESS, new CommentsSummaries(resDetail));

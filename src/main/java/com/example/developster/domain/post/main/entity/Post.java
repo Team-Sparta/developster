@@ -65,4 +65,11 @@ public class Post extends BaseTimeEntity {
             throw new InvalidParamException(ErrorCode.NOT_POST_WRITER);
         }
     }
+
+    public void reverseValidatePostWriter(Long userId) {
+        if (userId.equals(this.user.getId())) {
+            throw new InvalidParamException(ErrorCode.CONSTRAINT_VIOLATION);
+        }
+    }
+
 }
