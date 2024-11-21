@@ -59,7 +59,7 @@ public class NotificationService {
     }
 
 
-    public void saveNotification(User recipient, User sender, Long referenceId, String message, NotificationType type) {
+    public void sendNotification(User recipient, User sender, Long referenceId, String message, NotificationType type) {
         Notification newNotification = Notification.builder()
                 .recipient(recipient)
                 .sender(sender)

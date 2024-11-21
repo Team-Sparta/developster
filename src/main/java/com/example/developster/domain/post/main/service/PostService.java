@@ -17,6 +17,7 @@ import com.example.developster.domain.user.main.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class PostService {
         return new PostListResponse(allPosts);
     }
 
+    @Transactional
     public PostResponse loadPost(User user, Long postId) {
         PostDetailInfo postDetailInfo = postQueryRepository.getPostDetailById(postId, user);
         final List<String> urlList = mediaQueryRepository.getUrlList(postId);
@@ -57,8 +59,9 @@ public class PostService {
         return new PostResponse(postDetailInfo, new MediaInfo(urlList, urlList.size()));
     }
 
+    @Transactional
     public PostIdResponse updatePost(Long userId, WritePostRequest request, Long postId) {
-        Post post = postRepository.findByIdOrElseThrow(postId);
+        Post post = postRepository.fetchPost(postId);
 
         post.validatePostWriter(userId);
         post.update(request);
@@ -66,8 +69,9 @@ public class PostService {
         return new PostIdResponse(post.getId());
     }
 
+    @Transactional
     public PostIdResponse deletePost(Long userId, Long postId) {
-        Post post = postRepository.findByIdOrElseThrow(postId);
+        Post post = postRepository.fetchPost(postId);
 
         post.validatePostWriter(userId);
         post.delete();
