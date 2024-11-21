@@ -13,6 +13,7 @@ import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;
 import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class CommentController{
     @PostMapping
     public ResponseEntity<CommonResponse<CommentCreateResponseDto>> createComment(
             @PathVariable Long postId,
-            @RequestBody CommentCreateRequestDto dto,
+            @Valid @RequestBody CommentCreateRequestDto dto,
             @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
 
@@ -63,7 +64,7 @@ public class CommentController{
     public ResponseEntity<CommonResponse<CommentUpdateResponseDto>> updateComment(
             @PathVariable Long commentId,
             @SessionAttribute(AuthConstants.LOGIN_USER) User user,
-            @RequestBody CommentUpdateRequestDto dto
+            @Valid @RequestBody CommentUpdateRequestDto dto
     ){
         CommentUpdateResponseDto resDto = commentService.updateComment(commentId,user,dto);
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, resDto);

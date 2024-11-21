@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -74,7 +75,7 @@ public class CommentService {
         return new RepliesSummariesDetail(isFirst,isLast,size,dtoList);
     }
 
-
+    @Transactional
     public CommentUpdateResponseDto updateComment(Long commentId, User loginUser, CommentUpdateRequestDto dto) {
         //요청을 보낸 유저가 작성한 코멘트가 맞는지 확인
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
@@ -89,6 +90,7 @@ public class CommentService {
         return new CommentUpdateResponseDto(comment.getId());
     }
 
+    @Transactional
     public void deleteComment(Long commentId, User loginUser) {
         //요청을 보낸 유저가 작성한 코멘트가 맞는지 확인
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);

@@ -9,6 +9,7 @@ import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -18,6 +19,8 @@ public class CommentLikeService {
 
     private final CommentLikeRepository likeRepository;
     private final CommentRepository commentRepository;
+
+    @Transactional
     public void likeComment(Long commentId, User user) {
         //로그인 회원이 다른 사람의 댓글에 좋아요를 누른다.
 
@@ -37,6 +40,7 @@ public class CommentLikeService {
         likeRepository.save(like);
     }
 
+    @Transactional
     public void unlikeComment(Long commentId, User user) {
         //로그인 한 회원이 다른 사람의 댓글에 좋아요 취소(삭제)
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
