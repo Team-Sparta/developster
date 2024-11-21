@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class BookmarkService {
+public class PostBookmarkService {
     private final PostBookmarkJpaRepository postBookmarkJpaRepository;
     private final PostJpaRepository postJpaRepository;
 
