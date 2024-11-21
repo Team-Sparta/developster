@@ -9,18 +9,14 @@ public class CommentReadResponseDto {
     private final Long postId;
     private final Long commentId;
     private final String contents;
+    private final Integer commentCount;
     private final UserInfoDto userInfo;
-    public CommentReadResponseDto(Long postId, Long commentId, String contents, UserInfoDto userInfo) {
-        this.postId = postId;
-        this.commentId = commentId;
-        this.contents = contents;
-        this.userInfo =userInfo;
-    }
+
     public CommentReadResponseDto(Comment comment){
         this.postId = comment.getPost().getId();
         this.commentId = comment.getId();
         this.contents = comment.getContents();
-
+        this.commentCount = comment.getCommentList().size();
         this.userInfo = UserInfoDto.builder()
                 .id(comment.getUser().getId())
                 .name(comment.getUser().getName())
