@@ -10,6 +10,7 @@ import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,6 +20,10 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
+@Tag(
+        name = "알림 API",
+        description = "알림 관련 API"
+)
 @RestController
 @RequestMapping("/notifications")
 @RequiredArgsConstructor
@@ -51,7 +56,10 @@ public class NotificationController {
         return CommonResponse.success(SuccessCode.SUCCESS);
     }
 
-    // 전체 알림 조회
+    @Operation(
+            summary = "알림 목록 조회",
+            description = "사용자의 모든 알림 메시지를 조회합니다."
+    )
     @GetMapping
     public ResponseEntity<CommonResponse<List<NotificationResponseDto>>> findAllNotifications() {
         List<NotificationResponseDto> allNotification = notificationService.findAllNotification();
@@ -59,7 +67,10 @@ public class NotificationController {
         return CommonResponse.success(SuccessCode.SUCCESS, allNotification);
     }
 
-    // 전체 알림 읽음 처리
+    @Operation(
+            summary = "모든 알림 읽음 처리",
+            description = "사용자의 모든 알림을 읽음 처리 합니다."
+    )
     @PostMapping("/{notificationId}/read-all")
     public ResponseEntity<CommonResponse<Void>> allReadNotifications(
             @PathVariable Long notificationId
@@ -69,7 +80,10 @@ public class NotificationController {
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE);
     }
 
-    // 특정 알림 읽음 처리
+    @Operation(
+            summary = "알림 읽음 처리",
+            description = "사용자가 클릭한 알림을 읽음 처리 합니다."
+    )
     @PostMapping("/{notificationId}/read")
     public ResponseEntity<CommonResponse<Void>> readNotificationById(
             @PathVariable Long notificationId,
@@ -80,7 +94,10 @@ public class NotificationController {
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE);
     }
 
-    // 특정 알림 삭제
+    @Operation(
+            summary = "알림 삭제",
+            description = "사용자가 선택한 알림을 삭제합니다."
+    )
     @DeleteMapping("/{notificationId}")
     public ResponseEntity<CommonResponse<Void>> deleteNotification(
             @PathVariable Long notificationId,
@@ -91,7 +108,10 @@ public class NotificationController {
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE);
     }
 
-    // 전체 알림 삭제
+    @Operation(
+            summary = "모든 알림 삭제",
+            description = "사용자의 모든 알림을 삭제합니다."
+    )
     @DeleteMapping
     public ResponseEntity<CommonResponse<Void>> deleteAllNotifications(
             @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
