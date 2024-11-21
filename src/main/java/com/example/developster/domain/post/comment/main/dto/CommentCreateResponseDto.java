@@ -16,18 +16,9 @@ public class CommentCreateResponseDto {
     private final LocalDateTime createAt;
 
 
-    public CommentCreateResponseDto(Long postId, Long parentId, Long commentId, String contents, String writer, LocalDateTime createAt) {
-        this.postId = postId;
-        this.parentId = parentId;
-        this.commentId = commentId;
-        this.contents = contents;
-        this.writer = writer;
-        this.createAt = createAt;
-    }
-
     public CommentCreateResponseDto(Comment comment){
         this.postId = comment.getPost().getId();
-        this.parentId = comment.getParentComment().getId();
+        this.parentId = comment.getParentComment() == null ? null : comment.getParentComment().getId();
         this.commentId = comment.getId();
         this.contents = comment.getContents();
         this.writer = comment.getUser().getName();

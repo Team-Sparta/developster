@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -29,9 +30,14 @@ public class CommentLike extends BaseTimeEntity {
     @JoinColumn(name = "comment_id", nullable = false, columnDefinition = "BIGINT UNSIGNED comment '부모 댓글 번호'")
     private Comment comment;
 
+    @Setter
+    @Column(name = "is_like", nullable = false)
+    Boolean isLike = true;
+
     @Builder
     public CommentLike(User user,Comment comment){
         this.user = user;
         this.comment = comment;
+        this.isLike = true;
     }
 }

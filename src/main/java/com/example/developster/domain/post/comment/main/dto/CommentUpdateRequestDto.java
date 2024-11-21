@@ -3,8 +3,10 @@ package com.example.developster.domain.post.comment.main.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(force = true)
 public class CommentUpdateRequestDto {
 
     @NotBlank

@@ -1,5 +1,7 @@
 package com.example.developster.domain.post.comment.main.service;
 
+import com.example.developster.domain.notification.enums.NotificationType;
+import com.example.developster.domain.notification.service.NotificationService;
 import com.example.developster.domain.post.comment.main.dto.*;
 import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetail;
 import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetail;
@@ -20,12 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import static io.micrometer.common.util.StringUtils.truncate;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostJpaRepository postJpaRepository;
+    private final NotificationService notificationService;
 
     public CommentCreateResponseDto createComment(CommentCreateRequestDto dto, Long postId, User loginUser) {
         //게시글 아이디에 맞는 게시글을 찾는다.
@@ -43,18 +48,18 @@ public class CommentService {
                 .build();
         log.info("parent id: {}",parentId);
         Comment savedComment = commentRepository.save(newComment);
-
+        sendLikeNotification(loginUser, post);
         return new CommentCreateResponseDto(savedComment);
     }
 
     public CommentSummariesDetail readComments(Long postId, Long lastId, int size) {
         Pageable pageable = PageRequest.of(0, size);
 
+        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
+
         if (lastId == null) {
             lastId = Long.MAX_VALUE;
         }
-
-        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
 
         List<Comment> comments = commentRepository.readComments(postId, lastId, pageable);
         List<CommentReadResponseDto> dtoList = comments.stream().map(CommentReadResponseDto::new).toList();
@@ -68,6 +73,7 @@ public class CommentService {
         Pageable pageable = PageRequest.of(0,size);
 
         boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
+
         if (lastId == null) {
             lastId = Long.MAX_VALUE;
         }
@@ -105,5 +111,16 @@ public class CommentService {
             throw new BaseException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
         comment.delete();
+    }
+
+    private void sendLikeNotification(User liker, Post post) {
+        String message = liker.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 댓글을 달았습니다.";
+        notificationService.sendNotification(
+                liker,
+                post.getUser(),
+                post.getId(),
+                message,
+                NotificationType.COMMENT
+        );
     }
 }

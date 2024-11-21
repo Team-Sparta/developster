@@ -22,7 +22,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     }
 
     // 마지막 ID를 기준으로 이후 최근 데이터를 조회 (keyset pagination)
-    @Query("SELECT c FROM Comment c WHERE c.post.id = :postId AND c.deletedAt IS NULL AND c.id < :lastId ORDER BY c.createdAt DESC")
+    @Query("SELECT c FROM Comment c WHERE c.post.id = :postId AND c.parentComment.id IS NULL AND c.deletedAt IS NULL AND c.id < :lastId ORDER BY c.createdAt DESC")
     List<Comment> readComments(@Param("postId") Long postId, @Param("lastId") Long lastId, Pageable pageable);
 
     @Query("SELECT c FROM Comment c WHERE c.parentComment.id = :commentId AND c.deletedAt IS NULL AND c.id < :lastId ORDER BY c.createdAt DESC")
