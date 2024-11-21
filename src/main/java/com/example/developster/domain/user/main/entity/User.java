@@ -47,6 +47,9 @@ public class User extends BaseTimeEntity {
     @Column
     String profile;
 
+    @Column
+    Boolean public_status;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'active'")
     Status status;
@@ -63,6 +66,8 @@ public class User extends BaseTimeEntity {
         this.bio = bio;
         this.profile = profile;
 
+        this.public_status = true;
+
         this.role = Role.ROLE_ADMIN;
         this.status = Status.ACTIVE;
     }
@@ -71,6 +76,7 @@ public class User extends BaseTimeEntity {
         this.name = req.getName();
         this.bio = req.getBio();
         this.profile = req.getProfile();
+        this.public_status = req.isPublic_status();
     }
 
     public void delete() {
