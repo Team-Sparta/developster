@@ -57,7 +57,7 @@ public class UserService {
 
     public User loginUser(LoginRequestDto req) {
         User user = userRepository.findByEmail(req.getEmail());
-        if (user == null || matches(req.getPassword(), user.getPassword())) {
+        if (user == null || !matches(req.getPassword(), user.getPassword())) {
            throw new InvalidParamException(ErrorCode.INVALID_AUTHENTICATION);
         }
         return user;
