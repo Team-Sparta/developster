@@ -1,6 +1,6 @@
 package com.example.developster.domain.post.bookmark.controller;
 
-import com.example.developster.domain.post.bookmark.service.BookmarkService;
+import com.example.developster.domain.post.bookmark.service.PostBookmarkService;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;
 import com.example.developster.global.exception.code.SuccessCode;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/posts/{postId}/bookmarks")
-public class BookmarkController {
+public class PostBookmarkController {
 
-    private final BookmarkService bookmarkService;
+    private final PostBookmarkService bookmarkService;
 
     @PostMapping
     public ResponseEntity<CommonResponse<Object>> savePost(
