@@ -40,7 +40,7 @@ public class NotificationService {
     // 특정 알림 읽음 처리
     public void readNotificationById(Long id, Long userId) {
         Notification notification = notificationRepository.findByIdOrElseThrow(id);
-        notification.validateScheduleWriter(userId);
+        notification.validateNotificationRecipient(userId);
         notification.setIsRead(true);
     }
 
@@ -48,22 +48,23 @@ public class NotificationService {
     public void deleteNotification(Long id, Long userId) {
 
         Notification notification = notificationRepository.findByIdOrElseThrow(id);
-        notification.validateScheduleWriter(userId);
+        notification.validateNotificationRecipient(userId);
 
         notificationRepository.deleteById(id);
     }
 
     // 전체 알림 삭제
-    public void deleteAllNotification() {
-        notificationRepository.deleteAll();
+    public void deleteAllNotification(Long userId) {
+        notificationRepository.deleteAllByRecipientId(userId);
     }
 
 
-    public void saveNotification(User user, String relatedUrl, String message, NotificationType type) {
+    public void saveNotification(User recipient, User sender, Long referenceId, String message, NotificationType type) {
         Notification newNotification = Notification.builder()
-                .user(user)
+                .recipient(recipient)
+                .sender(sender)
                 .message(message)
-                .relatedUrl(relatedUrl)
+                .referenceId(referenceId)
                 .type(type)
                 .build();
 

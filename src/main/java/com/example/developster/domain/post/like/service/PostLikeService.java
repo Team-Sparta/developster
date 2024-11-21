@@ -23,7 +23,7 @@ public class PostLikeService {
         Post post = postJpaRepository.findByIdOrElseThrow(postId);
         Optional<PostLike> postLike = postLikeJpaRepository.findByUserAndPost(user, post);
 
-        if (postLike.isEmpty()) {
+        if (postLike.isPresent()) {
             throw new BaseException(ErrorCode.ALREADY_LIKED_POST);
         }
         PostLike newPostLike = PostLike.create(user, post);

@@ -24,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class PostService {
-
     private final PostJpaRepository postRepository;
     private final PostQueryRepository postQueryRepository;
     private final MediaJpaRepository mediaRepository;
@@ -37,7 +36,6 @@ public class PostService {
                 .content(request.getContent())
                 .isPrivate(request.getIsPrivate())
                 .build();
-
 
         Post save = postRepository.save(newPost);
 
@@ -62,7 +60,7 @@ public class PostService {
     public PostIdResponse updatePost(Long userId, WritePostRequest request, Long postId) {
         Post post = postRepository.findByIdOrElseThrow(postId);
 
-        post.validateScheduleWriter(userId);
+        post.validatePostWriter(userId);
         post.update(request);
 
         return new PostIdResponse(post.getId());
@@ -71,7 +69,7 @@ public class PostService {
     public PostIdResponse deletePost(Long userId, Long postId) {
         Post post = postRepository.findByIdOrElseThrow(postId);
 
-        post.validateScheduleWriter(userId);
+        post.validatePostWriter(userId);
         post.delete();
 
         return new PostIdResponse(postId);
@@ -85,6 +83,5 @@ public class PostService {
             Media media = Media.create(post, imageUrl);
             mediaRepository.save(media);
         }
-
     }
 }
