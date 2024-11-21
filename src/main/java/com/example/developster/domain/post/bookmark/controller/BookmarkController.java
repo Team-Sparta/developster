@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/posts/{postId}/bookmarks\"")
+@RequestMapping("/posts/{postId}/bookmarks")
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
