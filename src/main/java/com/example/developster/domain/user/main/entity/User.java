@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -23,6 +24,10 @@ public class User extends BaseTimeEntity {
 
     public enum Status {
         BLOCKED, ACTIVE, INACTIVE, WITHDRAWAL;
+    }
+
+    public enum PublicStatus {
+        PUBLIC, PRIVATE;
     }
 
 
@@ -48,7 +53,7 @@ public class User extends BaseTimeEntity {
     String profile;
 
     @Column
-    Boolean public_status;
+    Boolean public_status = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'active'")
@@ -76,7 +81,11 @@ public class User extends BaseTimeEntity {
         this.name = req.getName();
         this.bio = req.getBio();
         this.profile = req.getProfile();
-        this.public_status = req.isPublic_status();
+        if(req.getPublicStatus()!= null && Objects.equals(req.getPublicStatus(),"public")) {
+            this.public_status = true;
+        } else if (req.getPublicStatus()!= null && Objects.equals(req.getPublicStatus(),"private")) {
+            this.public_status = false;
+        }
     }
 
     public void delete() {

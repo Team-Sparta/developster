@@ -41,6 +41,7 @@ public enum ErrorCode {
     SAME_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호가 동일합니다."),
     EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호를 모두 입력해주세요."),
     ALREADY_DELETED_USER(HttpStatus.BAD_REQUEST, "이미 삭제된 유저 입니다."),
+    NONE_NAME(HttpStatus.BAD_REQUEST, "이름은 필수값입니다."),
 
 
     /**
