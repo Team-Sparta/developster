@@ -10,7 +10,9 @@ import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;
 import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
+@Tag(
+        name = "게시물 API",
+        description = "게시물 관련 API"
+)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/posts")
@@ -26,6 +32,10 @@ public class PostController {
 
     private final PostService postService;
 
+    @Operation(
+            summary = "게시물 생성",
+            description = "새로운 게시물을 생성합니다."
+    )
     @PostMapping
     public ResponseEntity<CommonResponse<PostIdResponse>> createPost(
             @Validated @RequestBody WritePostRequest requestDto,
@@ -58,6 +68,10 @@ public class PostController {
         return CommonResponse.success(SuccessCode.SUCCESS, postService.loadPostList(user, lastPostId, pageSize, orderBy, startDate, endDate));
     }
 
+    @Operation(
+            summary = "게시물 목록 조회",
+            description = "전체 게시물 목록을 조회한다."
+    )
     @GetMapping("/{postId}")
     public ResponseEntity<CommonResponse<PostResponse>> loadPost(
             @PathVariable Long postId,
@@ -66,6 +80,10 @@ public class PostController {
         return CommonResponse.success(SuccessCode.SUCCESS, postService.loadPost(user, postId));
     }
 
+    @Operation(
+            summary = "게시물 수정",
+            description = "특정 게시물을 수정한다."
+    )
     @PutMapping("/{postId}")
     public ResponseEntity<CommonResponse<PostIdResponse>> updatePost(
             @PathVariable Long postId,
@@ -75,6 +93,10 @@ public class PostController {
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, postService.updatePost(user.getId(), requestDto, postId));
     }
 
+    @Operation(
+            summary = "게시물 삭제",
+            description = "특정 게시물을 삭제한다."
+    )
     @DeleteMapping("/{postId}")
     public ResponseEntity<CommonResponse<PostIdResponse>> deletePost(
             @PathVariable Long postId,
