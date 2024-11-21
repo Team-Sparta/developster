@@ -14,4 +14,10 @@ public class Follow {
     @Column(name = "id", columnDefinition = "BIGINT UNSIGNED")
     private Long id;
 
+    @Column(name = "user_id", columnDefinition = "BIGINT UNSIGNED")
+    private Long userId;
+
+    @Column(name = "follow_user_id", columnDefinition = "BIGINT UNSIGNED")
+    private Long followUserId;
+
 }
