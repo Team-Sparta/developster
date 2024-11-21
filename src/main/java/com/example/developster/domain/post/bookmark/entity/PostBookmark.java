@@ -12,7 +12,11 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(
-        name = "post_bookmarks"
+        name = "post_bookmarks",
+        indexes = {
+                @Index(name = "idx_user_id", columnList = "user_id"),
+                @Index(name = "idx_post_id", columnList = "post_id")
+        }
 )
 public class PostBookmark extends BaseCreatedTimeEntity {
     @Id

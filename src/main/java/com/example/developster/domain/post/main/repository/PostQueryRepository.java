@@ -8,6 +8,7 @@ import com.example.developster.domain.post.main.entity.QPost;
 import com.example.developster.domain.post.main.enums.PostOrderType;
 import com.example.developster.domain.post.media.dto.MediaInfo;
 import com.example.developster.domain.post.media.repository.MediaQueryRepository;
+import com.example.developster.domain.user.follow.entity.QFollow;
 import com.example.developster.domain.user.main.dto.UserInfoDto;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.exception.InvalidParamException;
@@ -30,6 +31,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.querydsl.core.types.ConstructorExpression;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -40,33 +43,46 @@ public class PostQueryRepository {
     QPost post = QPost.post;
     QPostLike postLike = QPostLike.postLike;
     QComment comment = QComment.comment;
+    QFollow follow = QFollow.follow;
+
+
+    // Helper method to get UserInfoDto projection for user details
+    private ConstructorExpression<UserInfoDto> userInfoProjection() {
+        return Projections.constructor(
+                UserInfoDto.class,
+                post.user.id,
+                post.user.name,
+                post.user.profile
+        );
+    }
+
+    // Simplified method to handle the PostDetailInfo projection
+    private ConstructorExpression<PostDetailInfo> postDetailInfoProjection(User user) {
+        return Projections.constructor(
+                PostDetailInfo.class,
+                post.id,
+                post.title,
+                post.content,
+                userInfoProjection(),
+                post.createdAt,
+                postLike.count().as("likeCount"),
+                comment.count().as("commentCount"),
+                isLikedSubQuery(post, user),
+                post.isPrivate
+        );
+    }
 
     public PostDetailInfo getPostDetailById(Long postId, User user) {
         return Optional.ofNullable(
                         jpaQueryFactory
-                                .select(Projections.constructor(
-                                        PostDetailInfo.class,
-                                        post.id,
-                                        post.title,
-                                        post.content,
-                                        Projections.constructor(
-                                                UserInfoDto.class,
-                                                post.user.id,
-                                                post.user.name,
-                                                post.user.profile
-                                        ),
-                                        post.createdAt,
-                                        postLike.count().as("likeCount"),
-                                        comment.count().as("commentCount"),
-                                        isLikedSubQuery(post, user),
-                                        post.isPrivate
-                                ))
+                                .select(postDetailInfoProjection(user))
                                 .from(post)
                                 .leftJoin(comment).on(comment.post.eq(post).and(comment.deletedAt.isNull()))
                                 .leftJoin(postLike).on(postLike.post.eq(post))
                                 .where(
                                         post.id.eq(postId),
                                         isNotPrivateOrAuthor(post, user),
+                                        isAuthorPublicOrFollowEachOther(post, user),
                                         post.deletedAt.isNull()
                                 )
                                 .groupBy(post.id)
@@ -74,6 +90,7 @@ public class PostQueryRepository {
                 )
                 .orElseThrow(() -> new InvalidParamException(ErrorCode.NOT_FOUND_POST));
     }
+
 
     public Slice<PostResponse> getAllPosts(
             User user,
@@ -84,23 +101,7 @@ public class PostQueryRepository {
             LocalDate endDate) {
 
         List<PostDetailInfo> postDetailList = jpaQueryFactory
-                .select(Projections.constructor(
-                        PostDetailInfo.class,
-                        post.id,
-                        post.title,
-                        post.content,
-                        Projections.constructor(
-                                UserInfoDto.class,
-                                post.user.id,
-                                post.user.name,
-                                post.user.profile
-                        ),
-                        post.createdAt,
-                        postLike.count().as("likeCount"),
-                        comment.count().as("commentCount"),
-                        isLikedSubQuery(post, user),
-                        post.isPrivate
-                ))
+                .select(postDetailInfoProjection(user))
                 .from(post)
                 .leftJoin(comment).on(comment.post.eq(post).and(comment.deletedAt.isNull()))
                 .leftJoin(postLike).on(postLike.post.eq(post))
@@ -112,10 +113,9 @@ public class PostQueryRepository {
                 )
                 .groupBy(post.id)
                 .orderBy(getOrderSpecifier(orderType))
-                .limit(pageSize + 1L)
+                .limit(pageSize + 1L)  // Limit the query to one extra record for pagination
                 .fetch();
 
-        // Direct mapping to PostResponse using stream without creating intermediate collections
         List<PostResponse> postResponseList = postDetailList.stream()
                 .map(postDetail -> {
                     List<String> urlList = mediaQueryRepository.getUrlList(postDetail.postId());
@@ -124,9 +124,10 @@ public class PostQueryRepository {
                 })
                 .collect(Collectors.toList());
 
+        // Check if there are more pages
         boolean hasNext = postResponseList.size() > pageSize;
         if (hasNext) {
-            postResponseList.remove(pageSize);  // Remove last element if there is a next page
+            postResponseList.remove(pageSize);  // Remove the extra record if there is a next page
         }
 
         return new SliceImpl<>(postResponseList, PageRequest.ofSize(pageSize), hasNext);
@@ -160,6 +161,23 @@ public class PostQueryRepository {
     // Check if the post is not private or the user is the author
     private BooleanExpression isNotPrivateOrAuthor(QPost post, User user) {
         return post.isPrivate.isFalse().or(post.user.eq(user));
+    }
+
+    private BooleanExpression isAuthorPublicOrFollowEachOther(QPost post, User user) {
+        // If the post is public, the user can see it
+        BooleanExpression isAuthorPublic = post.user.public_status.isTrue();
+
+        // If the post is private, check if the user follows the author or is the author themselves
+        BooleanExpression isUserFollowing = jpaQueryFactory
+                .selectFrom(follow)
+                .where(
+                        follow.user.eq(user),  // Check if the user follows
+                        follow.followedUser.eq(post.user)  // The post's author is the followed user
+                )
+                .exists();
+
+        // The user can view the post if it is public or if they follow the author or are the author themselves
+        return isAuthorPublic.or(post.user.eq(user)).or(isUserFollowing);
     }
 
     // Return OrderSpecifier based on sorting type
