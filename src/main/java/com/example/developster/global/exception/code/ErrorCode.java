@@ -37,6 +37,9 @@ public enum ErrorCode {
     EXIST_USERNAME(HttpStatus.BAD_REQUEST, "중복된 이름입니다."),
     WRONG_CONDITION_PASSWORD(HttpStatus.BAD_REQUEST, "영문, 숫자, 특수문자를 최소 1글자씩 포함해야 하며 8글자 이상이어야 합니다."),
     WRONG_CONDITION_EMAIL(HttpStatus.BAD_REQUEST, "형식에 맞지 않는 이메일입니다."),
+    SAME_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호가 동일합니다."),
+    EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호를 모두 입력해주세요."),
+    ALREADY_DELETED_USER(HttpStatus.BAD_REQUEST, "이미 삭제된 유저 입니다."),
 
     /**
      * Post

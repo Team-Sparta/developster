@@ -1,6 +1,12 @@
 package com.example.developster.domain.user.main.controller;
 
-import com.example.developster.domain.user.main.dto.*;
+import com.example.developster.domain.user.main.dto.request.LoginRequestDto;
+import com.example.developster.domain.user.main.dto.request.UserCreateRequestDto;
+import com.example.developster.domain.user.main.dto.request.UserDeleteRequestDto;
+import com.example.developster.domain.user.main.dto.request.UserUpdateRequestDto;
+import com.example.developster.domain.user.main.dto.response.UserDeleteResponseDto;
+import com.example.developster.domain.user.main.dto.response.UserIdResponseDto;
+import com.example.developster.domain.user.main.dto.response.UserResponseDto;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.domain.user.main.service.UserService;
 import com.example.developster.global.constants.AuthConstants;
@@ -20,7 +26,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@RequestBody UserCreateRequestDto userRequestDto){
 
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, userService.createUser(userRequestDto));
     }
@@ -34,6 +40,23 @@ public class UserController {
         session.setAttribute(AuthConstants.LOGIN_USER, loginedUser);
 
         return CommonResponse.success(SuccessCode.SUCCESS, new UserIdResponseDto(loginedUser.getId()));
+    }
+
+
+
+    @PatchMapping
+    public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
+                                                                        @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+
+        return CommonResponse.success(SuccessCode.SUCCESS, userService.updateUser(userUpdateRequestDto, user));
+    }
+
+
+    @DeleteMapping
+    public ResponseEntity<CommonResponse<UserDeleteResponseDto>> deleteUser(@RequestBody UserDeleteRequestDto userDeleteRequestDto,
+                                                                            @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+
+        return CommonResponse.success(SuccessCode.SUCCESS, userService.delete(userDeleteRequestDto, user));
     }
 
 

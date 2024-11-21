@@ -1,9 +1,13 @@
 package com.example.developster.domain.user.main.service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.example.developster.domain.user.main.dto.LoginRequestDto;
-import com.example.developster.domain.user.main.dto.UserRequestDto;
-import com.example.developster.domain.user.main.dto.UserResponseDto;
+import com.example.developster.domain.user.main.dto.request.LoginRequestDto;
+import com.example.developster.domain.user.main.dto.request.UserCreateRequestDto;
+import com.example.developster.domain.user.main.dto.request.UserDeleteRequestDto;
+import com.example.developster.domain.user.main.dto.request.UserUpdateRequestDto;
+import com.example.developster.domain.user.main.dto.response.UserDeleteResponseDto;
+import com.example.developster.domain.user.main.dto.response.UserIdResponseDto;
+import com.example.developster.domain.user.main.dto.response.UserResponseDto;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.domain.user.main.repository.UserRepository;
 import com.example.developster.global.exception.InvalidParamException;
@@ -21,15 +25,15 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserResponseDto createUser(UserRequestDto req) {
+    public UserResponseDto createUser(UserCreateRequestDto req) {
 
 
-        if (validatePassword(req.getPassword())) {
-            throw new InvalidParamException(ErrorCode.WRONG_CONDITION_PASSWORD);
+        if (!validateEmail(req.getEmail())) {
+            throw new InvalidParamException(ErrorCode.WRONG_CONDITION_EMAIL);
         }
 
-        if (validateEmail(req.getEmail())) {
-            throw new InvalidParamException(ErrorCode.WRONG_CONDITION_EMAIL);
+        if (!validatePassword(req.getPassword())) {
+            throw new InvalidParamException(ErrorCode.WRONG_CONDITION_PASSWORD);
         }
 
         User user = userRepository.findByEmail(req.getEmail());
@@ -60,10 +64,48 @@ public class UserService {
         return user;
     }
 
+    public UserIdResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User user) {
+
+        User currentUser = userRepository.findByEmail(user.getEmail());
+        if (userUpdateRequestDto.getCurrentPassword() == null && userUpdateRequestDto.getNewPassword() == null) {
+            currentUser.update(userUpdateRequestDto);
+
+            return new UserIdResponseDto(user.getId());
+        } else if (userUpdateRequestDto.getCurrentPassword() == null || userUpdateRequestDto.getNewPassword() == null) {
+            throw new InvalidParamException(ErrorCode.EMPTY_PASSWORD);
+        }
+
+        if (!matches(userUpdateRequestDto.getCurrentPassword(), user.getPassword())){
+            throw new InvalidParamException(ErrorCode.INVALID_AUTHENTICATION);
+        }
+
+        if (matches(userUpdateRequestDto.getNewPassword(), user.getPassword())){
+            throw new InvalidParamException(ErrorCode.SAME_PASSWORD);
+        }
+
+        if (!validatePassword(userUpdateRequestDto.getNewPassword())) {
+            throw new InvalidParamException(ErrorCode.WRONG_CONDITION_PASSWORD);
+        }
+
+        currentUser.setPassword(encode(userUpdateRequestDto.getNewPassword()));
+        currentUser.update(userUpdateRequestDto);
+
+        return new UserIdResponseDto(user.getId());
+    }
 
 
+    public UserDeleteResponseDto delete(UserDeleteRequestDto userDeleteRequestDto, User user) {
 
+        User reqeustUser = userRepository.findByEmail(user.getEmail());
 
+        if(!matches(userDeleteRequestDto.getPassword(), user.getPassword())) {
+            throw new InvalidParamException(ErrorCode.INVALID_AUTHENTICATION);
+        }
+
+        reqeustUser.delete();
+
+        return new UserDeleteResponseDto(reqeustUser.getId(), reqeustUser.getDeletedAt());
+    }
 
 
     public static boolean validatePassword(String password) {
