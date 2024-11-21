@@ -10,10 +10,12 @@ import com.example.developster.domain.user.main.dto.response.UserIdResponseDto;
 import com.example.developster.domain.user.main.dto.response.UserResponseDto;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.domain.user.main.repository.UserRepository;
+import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.InvalidParamException;
 import com.example.developster.global.exception.code.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
@@ -21,6 +23,7 @@ import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
 
@@ -63,21 +66,19 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public UserIdResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User user) {
 
-        User currentUser = userRepository.findByEmail(user.getEmail());
         if (userUpdateRequestDto.getCurrentPassword() == null && userUpdateRequestDto.getNewPassword() == null) {
-            currentUser.update(userUpdateRequestDto);
-
-            return new UserIdResponseDto(user.getId());
+            throw new BaseException(ErrorCode.IS_NULL);
         } else if (userUpdateRequestDto.getCurrentPassword() == null || userUpdateRequestDto.getNewPassword() == null) {
             throw new InvalidParamException(ErrorCode.EMPTY_PASSWORD);
         }
 
         if (!matches(userUpdateRequestDto.getCurrentPassword(), user.getPassword())){
             throw new InvalidParamException(ErrorCode.INVALID_AUTHENTICATION);
-        }
 
+        }
         if (matches(userUpdateRequestDto.getNewPassword(), user.getPassword())){
             throw new InvalidParamException(ErrorCode.SAME_PASSWORD);
         }
@@ -86,8 +87,10 @@ public class UserService {
             throw new InvalidParamException(ErrorCode.WRONG_CONDITION_PASSWORD);
         }
 
-        currentUser.setPassword(encode(userUpdateRequestDto.getNewPassword()));
-        currentUser.update(userUpdateRequestDto);
+        user.setPassword(encode(userUpdateRequestDto.getNewPassword()));
+        user.update(userUpdateRequestDto);
+
+        userRepository.saveAndFlush(user);
 
         return new UserIdResponseDto(user.getId());
     }
@@ -95,15 +98,13 @@ public class UserService {
 
     public UserDeleteResponseDto delete(UserDeleteRequestDto userDeleteRequestDto, User user) {
 
-        User reqeustUser = userRepository.findByEmail(user.getEmail());
-
         if(!matches(userDeleteRequestDto.getPassword(), user.getPassword())) {
             throw new InvalidParamException(ErrorCode.INVALID_AUTHENTICATION);
         }
 
-        reqeustUser.delete();
+        user.delete();
 
-        return new UserDeleteResponseDto(reqeustUser.getId(), reqeustUser.getDeletedAt());
+        return new UserDeleteResponseDto(user.getId(), user.getDeletedAt());
     }
 
 
@@ -142,6 +143,8 @@ public class UserService {
 
     public boolean matches(String rawPassword, String encodedPassword) {
         BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), encodedPassword);
+
+        log.info(" is {}",result.verified);
         return result.verified;
     }
 }

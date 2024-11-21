@@ -2,7 +2,9 @@ package com.example.developster.domain.user.main.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(force = true)
 @Getter
 public class UserInfoDto {
 
@@ -11,7 +13,7 @@ public class UserInfoDto {
     private final String profile;
 
     @Builder
-    public UserInfoDto(String name, String profile, Long id) {
+    public UserInfoDto(Long id,String name, String profile) {
         this.id = id;
         this.name = name;
         this.profile = profile;
