@@ -6,10 +6,12 @@ import com.example.developster.domain.post.comment.main.dto.summary.RepliesSumma
 import com.example.developster.domain.post.comment.main.entity.Comment;
 import com.example.developster.domain.post.comment.main.repository.CommentRepository;
 import com.example.developster.domain.post.main.entity.Post;
+import com.example.developster.domain.post.main.repository.PostJpaRepository;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,14 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final PostJpaRepository postJpaRepository;
 
     public CommentCreateResponseDto createComment(CommentCreateRequestDto dto, Long postId, User loginUser) {
         //게시글 아이디에 맞는 게시글을 찾는다.
-        Post post = new Post();
+        Post post = postJpaRepository.fetchPost(postId);
         //dto의 parentId를 바탕으로 가져온 comment 세팅
         Long parentId = dto.getParentId();
         Comment comment = commentRepository.findByIdOrElseThrow(parentId);
@@ -37,7 +41,7 @@ public class CommentService {
                 .comment(comment)
                 .contents(dto.getContents())
                 .build();
-
+        log.info("parent id: {}",parentId);
         Comment savedComment = commentRepository.save(newComment);
 
         return new CommentCreateResponseDto(savedComment);

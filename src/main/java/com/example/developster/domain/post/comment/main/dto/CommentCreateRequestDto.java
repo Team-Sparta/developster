@@ -1,6 +1,5 @@
 package com.example.developster.domain.post.comment.main.dto;
 
-import com.example.developster.domain.post.comment.main.entity.Comment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

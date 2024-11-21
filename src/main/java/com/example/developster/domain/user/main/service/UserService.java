@@ -144,7 +144,6 @@ public class UserService {
     public boolean matches(String rawPassword, String encodedPassword) {
         BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), encodedPassword);
 
-        log.info(" is {}",result.verified);
         return result.verified;
     }
 }
