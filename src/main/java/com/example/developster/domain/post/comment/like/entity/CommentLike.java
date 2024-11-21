@@ -30,7 +30,7 @@ public class CommentLike extends BaseTimeEntity {
     private Comment comment;
 
     @Builder
-    public CommentLike(@NotNull User user, @NotNull Comment comment){
+    public CommentLike(User user,Comment comment){
         this.user = user;
         this.comment = comment;
     }

@@ -6,6 +6,8 @@ import com.example.developster.global.entity.BaseTimeEntity;
 import com.example.developster.global.exception.InvalidParamException;
 import com.example.developster.global.exception.code.ErrorCode;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,19 +28,20 @@ public class Comment extends BaseTimeEntity {
     private Long id;
 
     @Setter
-    @Column()
+    @NotBlank
+    @Column(name = "contents", columnDefinition = "VARCHAR(200) comment '댓글 내용'")
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", columnDefinition = "BIGINT UNSIGNED comment '게시물 고유 번호'")
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_id", columnDefinition = "BIGINT UNSIGNED comment '부모 댓글 번호'")
     private Comment parentComment;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", columnDefinition = "BIGINT UNSIGNED comment '유저 고유 번호'")
     private User user;
 
     @Builder
