@@ -13,8 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
+<<<<<<<< HEAD:src/main/java/com/example/developster/domain/post/bookmark/controller/PostBookmarkController.java
 @RequestMapping("/posts/{postId}/bookmarks")
 public class PostBookmarkController {
+========
+@RequestMapping("/posts/{postId}/bookmarks\"")
+public class BookmarkController {
+>>>>>>>> develop:src/main/java/com/example/developster/domain/post/bookmark/controller/BookmarkController.java
 
     private final PostBookmarkService bookmarkService;
 

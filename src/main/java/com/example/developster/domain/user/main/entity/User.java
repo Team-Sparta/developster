@@ -69,7 +69,6 @@ public class User extends BaseTimeEntity {
 
     public void update(UserUpdateRequestDto req) {
         this.name = req.getName();
-        this.password = req.getNewPassword();
         this.bio = req.getBio();
         this.profile = req.getProfile();
     }

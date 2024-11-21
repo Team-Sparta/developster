@@ -20,10 +20,10 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     // 전체 알림 조회
-    public List<NotificationResponseDto> findAllNotification() {
-
-        return notificationRepository.findAll().stream().map(NotificationResponseDto::toDto).toList();
-    }
+//    public List<NotificationResponseDto> findAllNotification() {
+//
+//        return notificationRepository.findAll().stream().map(NotificationResponseDto::toDto).toList();
+//    }
 
     // 전체 알림 일음 처리
     public void allReadNotifications(Long id) {
@@ -59,7 +59,7 @@ public class NotificationService {
     }
 
 
-    public void saveNotification(User recipient, User sender, Long referenceId, String message, NotificationType type) {
+    public void sendNotification(User recipient, User sender, Long referenceId, String message, NotificationType type) {
         Notification newNotification = Notification.builder()
                 .recipient(recipient)
                 .sender(sender)

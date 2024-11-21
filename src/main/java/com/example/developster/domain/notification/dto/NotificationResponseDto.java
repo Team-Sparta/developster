@@ -26,8 +26,8 @@ public class NotificationResponseDto {
         this.relatedUrl = relatedUrl;
     }
 
-    public static NotificationResponseDto toDto(Notification notification) {
-        return new NotificationResponseDto(notification.getId(), notification.getMessage(), notification.getIsRead(), notification.getUser().getId(),
-                                            notification.getType(), notification.getCreatedAt(), notification.getRelatedUrl());
-    }
+//    public static NotificationResponseDto toDto(Notification notification) {
+//        return new NotificationResponseDto(notification.getId(), notification.getMessage(), notification.getIsRead(), notification.getUser().getId(),
+//                                            notification.getType(), notification.getCreatedAt(), notification.getRelatedUrl());
+//    }
 }

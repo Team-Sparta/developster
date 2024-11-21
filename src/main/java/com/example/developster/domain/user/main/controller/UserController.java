@@ -65,7 +65,4 @@ public class UserController {
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE, userService.delete(userDeleteRequestDto, user));
     }
 
-
-
-
 }
