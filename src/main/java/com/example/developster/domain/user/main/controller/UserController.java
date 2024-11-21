@@ -42,13 +42,19 @@ public class UserController {
         return CommonResponse.success(SuccessCode.SUCCESS, new UserIdResponseDto(loginedUser.getId()));
     }
 
+    @GetMapping
+    public ResponseEntity<CommonResponse<UserResponseDto>> getUser(@SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+
+        return CommonResponse.success(SuccessCode.SUCCESS, UserResponseDto.toDto(user));
+    }
+
 
 
     @PatchMapping
     public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
                                                                         @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
 
-        return CommonResponse.success(SuccessCode.SUCCESS, userService.updateUser(userUpdateRequestDto, user));
+        return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, userService.updateUser(userUpdateRequestDto, user));
     }
 
 
@@ -56,7 +62,7 @@ public class UserController {
     public ResponseEntity<CommonResponse<UserDeleteResponseDto>> deleteUser(@RequestBody UserDeleteRequestDto userDeleteRequestDto,
                                                                             @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
 
-        return CommonResponse.success(SuccessCode.SUCCESS, userService.delete(userDeleteRequestDto, user));
+        return CommonResponse.success(SuccessCode.SUCCESS_DELETE, userService.delete(userDeleteRequestDto, user));
     }
 
 
