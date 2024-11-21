@@ -47,7 +47,7 @@ public class PostLikeService {
         Post post = postJpaRepository.fetchPost(postId);
         Optional<PostLike> postLike = postLikeJpaRepository.findByUserAndPost(user, post);
 
-        if (postLike.isEmpty()) {
+        if (postLike.isEmpty() || postLike.get().getIsLike()) {
             throw new BaseException(ErrorCode.NOT_FOUND_POST_LIKE);
         }
         postLike.get().setIsLike(false);

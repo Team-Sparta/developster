@@ -21,11 +21,9 @@ public class MediaQueryRepository {
                 .select(media.url)
                 .from(media)
                 .where(
-                        media.id.eq(postId),
+                        media.post.id.eq(postId),
                         media.deletedAt.isNull()
                 )
                 .fetch();
-
     }
-
 }

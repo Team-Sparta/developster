@@ -1,6 +1,7 @@
 package com.example.developster.domain.post.main.service;
 
 import com.example.developster.domain.post.main.dto.PostDetailInfo;
+import com.example.developster.domain.post.main.dto.PostSummary;
 import com.example.developster.domain.post.main.dto.request.WritePostRequest;
 import com.example.developster.domain.post.main.dto.response.PostIdResponse;
 import com.example.developster.domain.post.main.dto.response.PostListResponse;
@@ -46,7 +47,9 @@ public class PostService {
     }
 
     public PostListResponse loadPostList(User user, Long lastPostId, Integer pageSize, PostOrderType orderType) {
-        Slice<PostDetailInfo> allPosts = postQueryRepository.getAllPosts(user, lastPostId, pageSize, orderType);
+        Slice<PostResponse> allPosts = postQueryRepository.getAllPosts(user, lastPostId, pageSize, orderType);
+
+
 
         return new PostListResponse(allPosts);
     }
@@ -54,7 +57,7 @@ public class PostService {
     @Transactional
     public PostResponse loadPost(User user, Long postId) {
         PostDetailInfo postDetailInfo = postQueryRepository.getPostDetailById(postId, user);
-        final List<String> urlList = mediaQueryRepository.getUrlList(postId);
+        List<String> urlList = mediaQueryRepository.getUrlList(postId);
 
         return new PostResponse(postDetailInfo, new MediaInfo(urlList, urlList.size()));
     }

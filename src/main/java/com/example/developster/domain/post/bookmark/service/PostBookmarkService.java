@@ -24,7 +24,7 @@ public class PostBookmarkService {
         Post post = postJpaRepository.fetchPost(postId);
         Optional<PostBookmark> postBookmark = postBookmarkJpaRepository.findByUserAndPost(user, post);
 
-        if (postBookmark.isEmpty()) {
+        if (postBookmark.isPresent()) {
             throw new BaseException(ErrorCode.ALREADY_BOOKMARKED_POST);
         }
         PostBookmark bookmark = PostBookmark.create(user, post);
