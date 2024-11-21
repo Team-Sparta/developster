@@ -41,6 +41,13 @@ public enum ErrorCode {
     EMPTY_PASSWORD(HttpStatus.BAD_REQUEST, "기존 비밀번호와 새로운 비밀번호를 모두 입력해주세요."),
     ALREADY_DELETED_USER(HttpStatus.BAD_REQUEST, "이미 삭제된 유저 입니다."),
 
+
+    /**
+     * Follow
+     */
+    NOT_FOUND_FOLLOW(HttpStatus.BAD_REQUEST, "팔로우하지 않은 유저입니다."),
+
+
     /**
      * Post
      */
