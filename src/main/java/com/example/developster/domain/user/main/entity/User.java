@@ -1,10 +1,16 @@
 package com.example.developster.domain.user.main.entity;
 
 
+import com.example.developster.domain.user.main.dto.request.UserUpdateRequestDto;
 import com.example.developster.global.entity.BaseTimeEntity;
+import com.example.developster.global.exception.InvalidParamException;
+import com.example.developster.global.exception.code.ErrorCode;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -31,6 +37,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     String name;
 
+    @Setter
     @Column(nullable = false)
     String password;
 
@@ -58,6 +65,22 @@ public class User extends BaseTimeEntity {
 
         this.role = Role.ROLE_ADMIN;
         this.status = Status.ACTIVE;
+    }
+
+    public void update(UserUpdateRequestDto req) {
+        this.name = req.getName();
+        this.password = req.getNewPassword();
+        this.bio = req.getBio();
+        this.profile = req.getProfile();
+    }
+
+    public void delete() {
+        if (this.deletedAt != null) {
+            throw new InvalidParamException(ErrorCode.ALREADY_DELETED_USER);
+        }
+
+        this.deletedAt = LocalDateTime.now();
+        this.status = Status.WITHDRAWAL;
     }
 
 

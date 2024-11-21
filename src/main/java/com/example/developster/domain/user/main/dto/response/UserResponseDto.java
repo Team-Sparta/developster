@@ -1,4 +1,4 @@
-package com.example.developster.domain.user.main.dto;
+package com.example.developster.domain.user.main.dto.response;
 
 import com.example.developster.domain.user.main.entity.User;
 import lombok.Builder;
