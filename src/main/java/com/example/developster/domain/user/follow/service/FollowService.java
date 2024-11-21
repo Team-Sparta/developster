@@ -25,9 +25,9 @@ public class FollowService {
 
         User followedUser = userRepository.findByIdOrElseThrow(userFollowRequestDto.getId());
 
-        Follow.builder()
-            .user(user)
-            .followedUser(followedUser).build();
+        Follow follow = Follow.builder().user(user).followedUser(followedUser).build();
+        followRepository.save(follow);
+
     }
 
     public void unfollow(User user, Long followUserId) {
