@@ -68,9 +68,15 @@ public class UserService {
 
     @Transactional
     public UserIdResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User user) {
+        if (userUpdateRequestDto.getName() == null) {
+            throw new InvalidParamException(ErrorCode.NONE_NAME);
+        }
 
         if (userUpdateRequestDto.getCurrentPassword() == null && userUpdateRequestDto.getNewPassword() == null) {
-            throw new BaseException(ErrorCode.IS_NULL);
+            user.update(userUpdateRequestDto);
+            userRepository.saveAndFlush(user);
+
+            return new UserIdResponseDto(user.getId());
         } else if (userUpdateRequestDto.getCurrentPassword() == null || userUpdateRequestDto.getNewPassword() == null) {
             throw new InvalidParamException(ErrorCode.EMPTY_PASSWORD);
         }
