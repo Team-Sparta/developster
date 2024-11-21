@@ -9,4 +9,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
   default Notification findByIdOrElseThrow(Long id) {
       return findById(id).orElseThrow(()-> new InvalidParamException(ErrorCode.NOT_FOUND_MEMBER));
   }
+    void deleteAllByRecipientId(Long recipientId);
+
 }

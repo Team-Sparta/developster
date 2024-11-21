@@ -60,7 +60,7 @@ public class Post extends BaseTimeEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public void validateScheduleWriter(Long userId) {
+    public void validatePostWriter(Long userId) {
         if (!userId.equals(this.user.getId())) {
             throw new InvalidParamException(ErrorCode.NOT_POST_WRITER);
         }
