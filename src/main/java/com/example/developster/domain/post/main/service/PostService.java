@@ -15,6 +15,9 @@ import com.example.developster.domain.post.media.repository.MediaJpaRepository;
 import com.example.developster.domain.post.media.repository.MediaQueryRepository;
 import com.example.developster.domain.user.main.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +55,8 @@ public class PostService {
         return new PostListResponse(allPosts);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    @Cacheable("posts")
     public PostResponse loadPost(User user, Long postId) {
         PostDetailInfo postDetailInfo = postQueryRepository.getPostDetailById(postId, user);
         List<String> urlList = mediaQueryRepository.getUrlList(postId);
@@ -61,6 +65,7 @@ public class PostService {
     }
 
     @Transactional
+    @CachePut(value = "posts", key = "#postId")
     public PostIdResponse updatePost(Long userId, WritePostRequest request, Long postId) {
         Post post = postRepository.fetchPost(postId);
 
@@ -71,6 +76,7 @@ public class PostService {
     }
 
     @Transactional
+    @CacheEvict(value = "posts", key = "#postId")
     public PostIdResponse deletePost(Long userId, Long postId) {
         Post post = postRepository.fetchPost(postId);
 
