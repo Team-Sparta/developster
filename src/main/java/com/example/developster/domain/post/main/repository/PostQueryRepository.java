@@ -24,6 +24,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,7 +80,7 @@ public class PostQueryRepository {
                 .orElseThrow(() -> new InvalidParamException(ErrorCode.NOT_FOUND_POST));
     }
 
-    public Slice<PostResponse> getAllPosts(User user, Long lastPostId, int pageSize, PostOrderType orderType) {
+    public Slice<PostResponse> getAllPosts(User user, Long lastPostId, int pageSize, PostOrderType orderType, LocalDate startDate, LocalDate endDate) {
         List<PostDetailInfo> postDetailList = jpaQueryFactory
                 .select(
                         Projections.constructor(

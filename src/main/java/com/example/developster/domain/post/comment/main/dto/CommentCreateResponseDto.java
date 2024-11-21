@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CommentCreateResponseDto {
+
     private final Long postId;
     private final Long parentId;
     private final Long commentId;
