@@ -49,7 +49,6 @@ public class UserController {
     }
 
 
-
     @PatchMapping
     public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
                                                                         @SessionAttribute (AuthConstants.LOGIN_USER) User user) {

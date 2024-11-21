@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +45,9 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", columnDefinition = "BIGINT UNSIGNED comment '유저 고유 번호'")
     private User user;
+
+    @OneToMany(mappedBy = "parentComment", orphanRemoval = true)
+    List<Comment> commentList = new ArrayList<>();
 
     @Builder
     public Comment(String contents, User user, Post post, Comment comment){

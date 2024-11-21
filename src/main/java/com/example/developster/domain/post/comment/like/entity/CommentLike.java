@@ -17,6 +17,7 @@ import lombok.Setter;
         name = "comment_likes"
 )
 public class CommentLike extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column( columnDefinition = "BIGINT UNSIGNED comment '댓글 고유 번호'")
