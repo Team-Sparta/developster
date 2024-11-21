@@ -11,6 +11,7 @@ import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class PostLikeService {
     private final PostJpaRepository postJpaRepository;
     private final NotificationService notificationService;
 
+    @Transactional
     public void likePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
         PostLike postLike = postLikeJpaRepository.fetchOrCreatePostLike(user, post);
@@ -40,6 +42,7 @@ public class PostLikeService {
         }
     }
 
+    @Transactional
     public void unlikePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
         Optional<PostLike> postLike = postLikeJpaRepository.findByUserAndPost(user, post);

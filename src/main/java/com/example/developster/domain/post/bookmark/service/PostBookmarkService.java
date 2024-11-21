@@ -9,6 +9,7 @@ import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ public class PostBookmarkService {
     private final PostBookmarkJpaRepository postBookmarkJpaRepository;
     private final PostJpaRepository postJpaRepository;
 
+    @Transactional
     public void savePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
         Optional<PostBookmark> postBookmark = postBookmarkJpaRepository.findByUserAndPost(user, post);
@@ -29,6 +31,7 @@ public class PostBookmarkService {
         postBookmarkJpaRepository.save(bookmark);
     }
 
+    @Transactional
     public void unSavePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
         Optional<PostBookmark> postBookmark = postBookmarkJpaRepository.findByUserAndPost(user, post);
