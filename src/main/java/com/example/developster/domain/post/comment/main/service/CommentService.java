@@ -48,7 +48,7 @@ public class CommentService {
                 .build();
         log.info("parent id: {}",parentId);
         Comment savedComment = commentRepository.save(newComment);
-        sendLikeNotification(loginUser, post);
+        sendLikeNotification(loginUser, post, comment);
         return new CommentCreateResponseDto(savedComment);
     }
 
@@ -113,12 +113,12 @@ public class CommentService {
         comment.delete();
     }
 
-    private void sendLikeNotification(User liker, Post post) {
+    private void sendLikeNotification(User liker, Post post, Comment comment) {
         String message = liker.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 댓글을 달았습니다.";
         notificationService.sendNotification(
                 liker,
-                post.getUser(),
-                post.getId(),
+                comment.getUser(),
+                comment.getId(),
                 message,
                 NotificationType.COMMENT
         );
