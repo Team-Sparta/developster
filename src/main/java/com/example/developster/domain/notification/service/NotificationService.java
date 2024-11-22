@@ -126,7 +126,7 @@ public class NotificationService {
         String eventId = makeTimeIncludeId(recipientId);
 
 
-
+//
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(recipientId));
         emitters.forEach(
                 (key, emitter) -> {

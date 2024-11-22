@@ -1,13 +1,13 @@
 package com.example.developster.domain.post.comment.main.controller;
 
-import com.example.developster.domain.post.comment.main.dto.CommentUpdateRequestDto;
-import com.example.developster.domain.post.comment.main.dto.CommentUpdateResponseDto;
+import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateRequestDto;
+import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateResponseDto;
 import com.example.developster.domain.post.comment.main.dto.summary.CommentsSummaries;
 import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetail;
 import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummaries;
 import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetail;
-import com.example.developster.domain.post.comment.main.dto.CommentCreateRequestDto;
-import com.example.developster.domain.post.comment.main.dto.CommentCreateResponseDto;
+import com.example.developster.domain.post.comment.main.dto.request.CommentCreateRequestDto;
+import com.example.developster.domain.post.comment.main.dto.response.CommentCreateResponseDto;
 import com.example.developster.domain.post.comment.main.service.CommentService;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;

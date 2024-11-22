@@ -3,6 +3,10 @@ package com.example.developster.domain.post.comment.main.service;
 import com.example.developster.domain.notification.enums.NotificationType;
 import com.example.developster.domain.notification.service.NotificationService;
 import com.example.developster.domain.post.comment.main.dto.*;
+import com.example.developster.domain.post.comment.main.dto.request.CommentCreateRequestDto;
+import com.example.developster.domain.post.comment.main.dto.response.CommentCreateResponseDto;
+import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateRequestDto;
+import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateResponseDto;
 import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetail;
 import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetail;
 import com.example.developster.domain.post.comment.main.entity.Comment;
@@ -15,13 +19,10 @@ import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Objects;
 
 import static io.micrometer.common.util.StringUtils.truncate;

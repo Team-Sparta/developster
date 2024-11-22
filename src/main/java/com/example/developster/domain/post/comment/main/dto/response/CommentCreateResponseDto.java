@@ -1,4 +1,4 @@
-package com.example.developster.domain.post.comment.main.dto;
+package com.example.developster.domain.post.comment.main.dto.response;
 
 
 import com.example.developster.domain.post.comment.main.entity.Comment;
