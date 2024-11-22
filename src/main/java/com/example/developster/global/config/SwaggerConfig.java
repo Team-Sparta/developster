@@ -29,7 +29,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Developster")
-                        .description("Schedule REST API")
+                        .description("Developster REST API")
                         .version("v1"));
     }
 
