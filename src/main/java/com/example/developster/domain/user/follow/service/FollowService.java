@@ -1,5 +1,8 @@
 package com.example.developster.domain.user.follow.service;
 
+import com.example.developster.domain.notification.enums.NotificationType;
+import com.example.developster.domain.notification.service.NotificationService;
+import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.follow.dto.UserFollowRequestDto;
 import com.example.developster.domain.user.follow.entity.Follow;
 import com.example.developster.domain.user.follow.repository.FollowRepository;
@@ -11,14 +14,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static io.micrometer.common.util.StringUtils.truncate;
+
 @Service
 public class FollowService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final NotificationService notificationService;
 
-    public FollowService(UserRepository userRepository, FollowRepository followRepository) {
+
+    public FollowService(UserRepository userRepository, FollowRepository followRepository, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.followRepository = followRepository;
+        this.notificationService = notificationService;
     }
 
     public void createFollow(UserFollowRequestDto userFollowRequestDto, User user) {
@@ -26,7 +34,9 @@ public class FollowService {
         User followedUser = userRepository.findByIdOrElseThrow(userFollowRequestDto.getId());
 
         Follow follow = Follow.builder().user(user).followedUser(followedUser).build();
-        followRepository.save(follow);
+        Follow savedfollow = followRepository.save(follow);
+
+        sendFollowNotification(user, followedUser, savedfollow.getId());
 
     }
 
@@ -39,5 +49,22 @@ public class FollowService {
         }
 
         followRepository.delete(follow.get());
+    }
+
+    private void sendFollowNotification(User user, User followedUser, Long followId) {
+        String message;
+        if (followedUser.getPublic_status()) {
+            message = user.getName() + "님이 " + followedUser.getName() + "님을 팔로우합니다.";
+        } else {
+            message = user.getName() + "님이 " + followedUser.getName() + "님에게 팔로우를 요청했습니다.";
+        }
+
+        notificationService.sendNotification(
+                user,
+                followedUser,
+                followId,
+                message,
+                NotificationType.COMMENT
+        );
     }
 }

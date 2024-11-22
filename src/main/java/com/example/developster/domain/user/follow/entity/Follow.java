@@ -1,7 +1,6 @@
 package com.example.developster.domain.user.follow.entity;
 
 import com.example.developster.domain.user.main.entity.User;
-import com.example.developster.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -33,13 +32,14 @@ public class Follow {
     private User followedUser;
 
     @CreatedDate
-    @Column(name = "followed_at", updatable = false, columnDefinition = "datetime")
+    @Column(name = "followed_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime followedAt;
 
     @Builder
     public Follow(User user, User followedUser) {
         this.user = user;
         this.followedUser = followedUser;
+        this.followedAt = LocalDateTime.now();
     }
 
 
