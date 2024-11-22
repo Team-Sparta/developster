@@ -1,6 +1,10 @@
 package com.example.developster.domain.user.main.entity;
 
 
+import com.example.developster.domain.notification.entity.Notification;
+import com.example.developster.domain.post.comment.main.entity.Comment;
+import com.example.developster.domain.post.main.entity.Post;
+import com.example.developster.domain.user.follow.entity.Follow;
 import com.example.developster.domain.user.main.dto.request.UserUpdateRequestDto;
 import com.example.developster.global.entity.BaseTimeEntity;
 import com.example.developster.global.exception.InvalidParamException;
@@ -11,6 +15,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -25,11 +31,6 @@ public class User extends BaseTimeEntity {
     public enum Status {
         BLOCKED, ACTIVE, INACTIVE, WITHDRAWAL;
     }
-
-    public enum PublicStatus {
-        PUBLIC, PRIVATE;
-    }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,15 +54,26 @@ public class User extends BaseTimeEntity {
     String profile;
 
     @Column
-    Boolean public_status = true;
+    Boolean publicStatus = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'active'")
     Status status;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'role_admin'")
+    @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'role_user'")
     Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,orphanRemoval = true)
+    List<Post> postList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipient",cascade = CascadeType.REMOVE,orphanRemoval=true)
+    List<Notification> notificationList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,orphanRemoval = true)
+    List<Follow> followList = new ArrayList<>();
+
+
 
     @Builder
     public User(String name, String email, String password, String bio, String profile) {
