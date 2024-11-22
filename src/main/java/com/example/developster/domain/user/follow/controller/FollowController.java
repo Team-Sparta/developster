@@ -1,8 +1,8 @@
 package com.example.developster.domain.user.follow.controller;
 
-import com.example.developster.domain.user.follow.dto.AcceptFollowRequestDto;
-import com.example.developster.domain.user.follow.dto.FollowListResponseDto;
-import com.example.developster.domain.user.follow.dto.UserFollowRequestDto;
+import com.example.developster.domain.user.follow.dto.request.AcceptFollowRequestDto;
+import com.example.developster.domain.user.follow.dto.response.FollowListResponseDto;
+import com.example.developster.domain.user.follow.dto.request.UserFollowRequestDto;
 import com.example.developster.domain.user.follow.service.FollowService;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;

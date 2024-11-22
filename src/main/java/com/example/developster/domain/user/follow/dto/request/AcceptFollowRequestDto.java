@@ -1,4 +1,4 @@
-package com.example.developster.domain.user.follow.dto;
+package com.example.developster.domain.user.follow.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
