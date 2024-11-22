@@ -3,7 +3,7 @@ package com.example.developster.domain.post.main.repository;
 import com.example.developster.domain.post.comment.main.entity.QComment;
 import com.example.developster.domain.post.like.entity.QPostLike;
 import com.example.developster.domain.post.main.dto.PostDetailInfo;
-import com.example.developster.domain.post.main.dto.response.PostResponse;
+import com.example.developster.domain.post.main.dto.response.PostResponseDto;
 import com.example.developster.domain.post.main.entity.QPost;
 import com.example.developster.domain.post.main.enums.PostOrderType;
 import com.example.developster.domain.post.media.dto.MediaInfo;
@@ -93,7 +93,7 @@ public class PostQueryRepository {
     }
 
 
-    public Slice<PostResponse> getAllPosts(
+    public Slice<PostResponseDto> getAllPosts(
             User user,
             Long lastPostId,
             int pageSize,
@@ -117,11 +117,11 @@ public class PostQueryRepository {
                 .limit(pageSize + 1L)  // Limit the query to one extra record for pagination
                 .fetch();
 
-        List<PostResponse> postResponseList = postDetailList.stream()
+        List<PostResponseDto> postResponseList = postDetailList.stream()
                 .map(postDetail -> {
                     List<String> urlList = mediaQueryRepository.getUrlList(postDetail.postId());
                     MediaInfo mediaInfo = new MediaInfo(urlList, urlList.size());
-                    return new PostResponse(postDetail, mediaInfo);
+                    return new PostResponseDto(postDetail, mediaInfo);
                 })
                 .collect(Collectors.toList());
 

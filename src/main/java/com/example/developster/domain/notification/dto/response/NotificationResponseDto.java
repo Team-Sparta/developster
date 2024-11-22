@@ -1,11 +1,9 @@
-package com.example.developster.domain.notification.dto;
+package com.example.developster.domain.notification.dto.response;
 
 
 import com.example.developster.domain.notification.entity.Notification;
 import com.example.developster.domain.notification.enums.NotificationType;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 

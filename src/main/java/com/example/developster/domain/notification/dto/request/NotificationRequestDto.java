@@ -1,4 +1,4 @@
-package com.example.developster.domain.notification.dto;
+package com.example.developster.domain.notification.dto.request;
 
 import lombok.Getter;
 

@@ -9,7 +9,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class WritePostRequest {
+public class WritePostRequestDto {
     @NotEmpty(message = "제목이 누락되었습니다.")
     @Size(min = 5, max = 100, message = "재목은 최소 5글자, 최대 100글자까지 작성 가능합니다.")
     private String title;
