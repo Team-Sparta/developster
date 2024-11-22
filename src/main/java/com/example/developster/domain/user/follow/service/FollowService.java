@@ -34,9 +34,9 @@ public class FollowService {
         User followedUser = userRepository.findByIdOrElseThrow(userFollowRequestDto.getId());
 
         Follow follow = Follow.builder().user(user).followedUser(followedUser).build();
-        Follow savedfollow = followRepository.save(follow);
+//        Follow savedfollow = followRepository.save(follow);
 
-        sendFollowNotification(user, followedUser, savedfollow.getId());
+//        sendFollowNotification(user, followedUser, savedfollow.getId());
 
     }
 
