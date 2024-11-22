@@ -14,7 +14,6 @@ import com.example.developster.domain.post.media.entity.Media;
 import com.example.developster.domain.post.media.repository.MediaJpaRepository;
 import com.example.developster.domain.post.media.repository.MediaQueryRepository;
 import com.example.developster.domain.user.main.entity.User;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -27,10 +26,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 
-@Tag(
-        name = "게시물 API",
-        description = "게시물 관련 API"
-)
 @RequiredArgsConstructor
 @Service
 public class PostService {
