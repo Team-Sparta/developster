@@ -6,6 +6,7 @@ import com.example.developster.domain.post.comment.main.dto.*;
 import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetail;
 import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetail;
 import com.example.developster.domain.post.comment.main.entity.Comment;
+import com.example.developster.domain.post.comment.main.repository.CommentQueryRepository;
 import com.example.developster.domain.post.comment.main.repository.CommentRepository;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.post.main.repository.PostJpaRepository;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostJpaRepository postJpaRepository;
     private final NotificationService notificationService;
+    private final CommentQueryRepository commentQueryRepository;
 
     public CommentCreateResponseDto createComment(CommentCreateRequestDto dto, Long postId, User loginUser) {
         //게시글 아이디에 맞는 게시글을 찾는다.
@@ -48,41 +51,33 @@ public class CommentService {
                 .build();
         log.info("parent id: {}",parentId);
         Comment savedComment = commentRepository.save(newComment);
-        sendLikeNotification(loginUser, post, comment);
+        log.info("user name: {}", savedComment.getUser().getName());
+        sendLikeNotification(loginUser, post, newComment);
         return new CommentCreateResponseDto(savedComment);
     }
 
-    public CommentSummariesDetail readComments(Long postId, Long lastId, int size) {
-        Pageable pageable = PageRequest.of(0, size);
+    public CommentSummariesDetail readComments(User user,Long postId, Long lastId, int size) {
+//        Pageable pageable = PageRequest.of(0, size);
+//
+//        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
+//
+//        if (lastId == null) {
+//            lastId = Long.MAX_VALUE;
+//        }
 
-        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
+//        List<Comment> comments = commentRepository.readComments(postId, lastId, pageable);
+        Slice<CommentDetailInfo> allComments = commentQueryRepository.getAllComments(user, lastId, size);
+//        List<CommentReadResponseDto> dtoList = comments.stream().map(CommentReadResponseDto::new).toList();
 
-        if (lastId == null) {
-            lastId = Long.MAX_VALUE;
-        }
+//        boolean isLast = comments.size() < size;
 
-        List<Comment> comments = commentRepository.readComments(postId, lastId, pageable);
-        List<CommentReadResponseDto> dtoList = comments.stream().map(CommentReadResponseDto::new).toList();
-
-        boolean isLast = comments.size() < size;
-
-        return new CommentSummariesDetail(isFirst,isLast,size,dtoList);
+//        return new CommentSummariesDetail(isFirst,isLast,size,dtoList);
+        return new CommentSummariesDetail(allComments);
     }
 
-    public RepliesSummariesDetail readReplies(Long commentId, Long lastId, int size) {
-        Pageable pageable = PageRequest.of(0,size);
-
-        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
-
-        if (lastId == null) {
-            lastId = Long.MAX_VALUE;
-        }
-
-        List<Comment> comments = commentRepository.readReplies(commentId,lastId,pageable);
-        List<CommentReadResponseDto> dtoList = comments.stream().map(CommentReadResponseDto::new).toList();
-
-        boolean isLast = comments.size() < size;
-        return new RepliesSummariesDetail(isFirst,isLast,size,dtoList);
+    public RepliesSummariesDetail readReplies(User user, Long commentId, Long lastId, int size) {
+        Slice<CommentDetailInfo> allReplies = commentQueryRepository.getAllReplies(user, commentId, lastId, size);
+        return new RepliesSummariesDetail(allReplies);
     }
 
     @Transactional

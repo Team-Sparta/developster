@@ -8,6 +8,7 @@ import com.example.developster.domain.user.main.dto.UserInfoDto;
 import com.example.developster.domain.user.main.entity.User;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -28,15 +29,47 @@ public class CommentQueryRepository {
     QPost post = QPost.post;
 
     public Slice<CommentDetailInfo> getAllComments (User user, Long lastCommentId, int pageSize){
-        List<CommentDetailInfo> commentDetailInfoList = jpaQueryFactory
+        List<CommentDetailInfo> commentDetailInfoList = getQuery(user)
+                .where(
+                        comment.parentComment.isNull(),
+                        post.deletedAt.isNull(),
+                        noOffsetByCommentId(comment, lastCommentId)
+                )
+                .groupBy(comment.id)
+                .orderBy(comment.createdAt.desc())
+                .limit(pageSize+1L)
+                .fetch();
+
+
+        return getSlice(pageSize, commentDetailInfoList);
+    }
+
+    public Slice<CommentDetailInfo> getAllReplies (User user,Long commentId, Long lastCommentId, int pageSize){
+        List<CommentDetailInfo> commentDetailInfoList = getQuery(user)
+                .where(
+                        comment.parentComment.id.eq(commentId),
+                        post.deletedAt.isNull(),
+                        noOffsetByCommentId(comment, lastCommentId)
+                )
+                .groupBy(comment.id)
+                .orderBy(comment.createdAt.desc())
+                .limit(pageSize+1L)
+                .fetch();
+
+
+        return getSlice(pageSize, commentDetailInfoList);
+    }
+
+    private JPAQuery<CommentDetailInfo> getQuery(User user) {
+        return jpaQueryFactory
                 .select(
-                        Projections.constructor (
+                        Projections.constructor(
                                 CommentDetailInfo.class,
                                 post.id,
                                 comment.id,
                                 comment.contents,
                                 commentLike.count().as("likeCount"),
-                                comment.count().as("commentCount"),
+                                comment.commentList.size().longValue().as("commentCount"),
                                 isLikedSubQuery(comment, user),
                                 Projections.constructor(
                                         UserInfoDto.class,
@@ -48,17 +81,10 @@ public class CommentQueryRepository {
                 )
                 .from(comment)
                 .leftJoin(post).on(comment.post.eq(post).and(comment.deletedAt.isNull()))
-                .leftJoin(commentLike).on(commentLike.comment.eq(comment))
-                .where(
-                        post.deletedAt.isNull(),
-                        noOffsetByCommentId(comment, lastCommentId)
-                )
-                .groupBy(comment.id)
-                .orderBy(comment.createdAt.desc())
-                .limit(pageSize+1L)
-                .fetch();
+                .leftJoin(commentLike).on(commentLike.comment.eq(comment).and(commentLike.isLike.isTrue()));
+    }
 
-
+    private static SliceImpl<CommentDetailInfo> getSlice(int pageSize, List<CommentDetailInfo> commentDetailInfoList) {
         boolean hasNext = commentDetailInfoList.size() > pageSize;
         if (hasNext) {
             commentDetailInfoList.remove(pageSize);
