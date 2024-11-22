@@ -13,11 +13,17 @@ import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;
 import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+        name = "게시물 댓글 API",
+        description = "게시물 댓글 관련 API"
+)
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts/{postId}/comments")
@@ -25,6 +31,10 @@ public class CommentController{
 
     private final CommentService commentService;
 
+    @Operation(
+            summary = "댓글 생성",
+            description = "새로운 댓글을 생성합니다."
+    )
     @PostMapping
     public ResponseEntity<CommonResponse<CommentCreateResponseDto>> createComment(
             @PathVariable Long postId,
@@ -36,7 +46,10 @@ public class CommentController{
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT,resDto);
     }
 
-    //댓글 조회
+    @Operation(
+            summary = "댓글 조회",
+            description = "한 게시물의 댓글을 모두 조회합니다."
+    )
     @GetMapping
     public ResponseEntity<CommonResponse<CommentsSummaries>> readComments(
             @PathVariable Long postId,
@@ -49,9 +62,13 @@ public class CommentController{
         return CommonResponse.success(SuccessCode.SUCCESS, new CommentsSummaries(resDetail));
     }
 
-    //답글 조회
+    @Operation(
+            summary = "답글 조회",
+            description = "한 댓글의 답글을 모두 조회합니다."
+    )
     @GetMapping("/{commentId}")
     public ResponseEntity<CommonResponse<RepliesSummaries>> readReplies(
+            @PathVariable Long postId,
             @PathVariable Long commentId,
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int size,
@@ -61,9 +78,16 @@ public class CommentController{
         return CommonResponse.success(SuccessCode.SUCCESS, new RepliesSummaries(resDetail));
     }
 
-    //댓글,답글 수정
+    @Operation(
+            summary = "댓글 혹은 답글 수정",
+            description = """
+                    자신이 작성한 댓글 혹은 답글을 수정합니다.
+                    타인의 댓글을 수정할 수 없습니다.
+                    """
+    )
     @PutMapping("/{commentId}")
     public ResponseEntity<CommonResponse<CommentUpdateResponseDto>> updateComment(
+            @PathVariable Long postId,
             @PathVariable Long commentId,
             @SessionAttribute(AuthConstants.LOGIN_USER) User user,
             @Valid @RequestBody CommentUpdateRequestDto dto
@@ -72,9 +96,16 @@ public class CommentController{
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, resDto);
     }
 
-    //댓글 삭제
+    @Operation(
+            summary = "댓글 삭제",
+            description = """
+                    자신이 작성한 댓글 혹은 답글을 삭제합니다.
+                    타인의 댓글을 삭제할 수 없습니다.
+                    """
+    )
     @DeleteMapping("/{commentId}")
     public ResponseEntity<CommonResponse<Void>> deleteComment(
+            @PathVariable Long postId,
             @PathVariable Long commentId,
             @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
