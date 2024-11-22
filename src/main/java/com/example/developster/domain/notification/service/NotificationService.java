@@ -80,9 +80,9 @@ public class NotificationService {
     @Transactional
     public void sendNotificationToAllUsers(User loginMember, CreateNotificationRequest request) {
         validateAdmin(loginMember);
-      List<User> allMembers = userRepository.findAllByStatus(User.Status.ACTIVE);
-      allMembers.forEach(member -> CompletableFuture.runAsync(
-              () -> sendAsync(member, request.notificationType(), request.content(), request.referenceId())));
+        List<User> allMembers = userRepository.findAllByStatus(User.Status.ACTIVE);
+        allMembers.forEach(member -> CompletableFuture.runAsync(
+                () -> sendAsync(member, request.notificationType(), request.content(), request.referenceId())));
     }
 
     private void validateAdmin(User loginMember) {
