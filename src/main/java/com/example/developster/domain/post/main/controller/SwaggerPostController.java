@@ -1,8 +1,8 @@
 package com.example.developster.domain.post.main.controller;
 
-import com.example.developster.domain.post.main.dto.request.WritePostRequest;
-import com.example.developster.domain.post.main.dto.response.PostIdResponse;
-import com.example.developster.domain.post.main.dto.response.PostListResponse;
+import com.example.developster.domain.post.main.dto.request.WritePostRequestDto;
+import com.example.developster.domain.post.main.dto.response.PostIdResponseDto;
+import com.example.developster.domain.post.main.dto.response.PostListResponseDto;
 import com.example.developster.domain.post.main.enums.PostOrderType;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.constants.AuthConstants;
@@ -42,8 +42,8 @@ public interface SwaggerPostController {
                                             }
                                     """))})
     })
-    ResponseEntity<CommonResponse<PostIdResponse>> createPost(
-            @Validated @RequestBody WritePostRequest requestDto,
+    ResponseEntity<CommonResponse<PostIdResponseDto>> createPost(
+            @Validated @RequestBody WritePostRequestDto requestDto,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
     );
 
@@ -61,7 +61,7 @@ public interface SwaggerPostController {
                                             }
                                     """))})
     })
-    ResponseEntity<CommonResponse<PostListResponse>> loadPostList(
+    ResponseEntity<CommonResponse<PostListResponseDto>> loadPostList(
             @RequestParam(required = false) Long lastPostId,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) PostOrderType orderBy,

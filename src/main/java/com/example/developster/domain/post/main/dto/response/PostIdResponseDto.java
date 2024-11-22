@@ -1,6 +1,6 @@
 package com.example.developster.domain.post.main.dto.response;
 
-public record PostIdResponse(
+public record PostIdResponseDto (
         Long postId
 ) {
 }

@@ -1,10 +1,10 @@
 package com.example.developster.domain.post.main.service;
 
 import com.example.developster.domain.post.main.dto.PostDetailInfo;
-import com.example.developster.domain.post.main.dto.request.WritePostRequest;
-import com.example.developster.domain.post.main.dto.response.PostIdResponse;
-import com.example.developster.domain.post.main.dto.response.PostListResponse;
-import com.example.developster.domain.post.main.dto.response.PostResponse;
+import com.example.developster.domain.post.main.dto.request.WritePostRequestDto;
+import com.example.developster.domain.post.main.dto.response.PostIdResponseDto;
+import com.example.developster.domain.post.main.dto.response.PostListResponseDto;
+import com.example.developster.domain.post.main.dto.response.PostResponseDto;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.post.main.enums.PostOrderType;
 import com.example.developster.domain.post.main.repository.PostJpaRepository;
@@ -34,7 +34,7 @@ public class PostService {
     private final MediaJpaRepository mediaRepository;
     private final MediaQueryRepository mediaQueryRepository;
 
-    public PostIdResponse createPost(User user, WritePostRequest request) {
+    public PostIdResponseDto createPost(User user, WritePostRequestDto request) {
         Post newPost = Post.builder()
                 .user(user)
                 .title(request.getTitle())
@@ -46,27 +46,27 @@ public class PostService {
 
         storeMedia(request.getImageUrls(), request.getVideoUrl(), save);
 
-        return new PostIdResponse(save.getId());
+        return new PostIdResponseDto(save.getId());
     }
 
-    public PostListResponse loadPostList(User user, Long lastPostId, Integer pageSize, PostOrderType orderType, LocalDate startDate, LocalDate endDate) {
-        Slice<PostResponse> allPosts = postQueryRepository.getAllPosts(user, lastPostId, pageSize, orderType, startDate, endDate);
+    public PostListResponseDto loadPostList(User user, Long lastPostId, Integer pageSize, PostOrderType orderType, LocalDate startDate, LocalDate endDate) {
+        Slice<PostResponseDto> allPosts = postQueryRepository.getAllPosts(user, lastPostId, pageSize, orderType, startDate, endDate);
 
-        return new PostListResponse(allPosts);
+        return new PostListResponseDto(allPosts);
     }
 
     @Transactional(readOnly = true)
     @Cacheable("posts")
-    public PostResponse loadPost(User user, Long postId) {
+    public PostResponseDto loadPost(User user, Long postId) {
         PostDetailInfo postDetailInfo = postQueryRepository.getPostDetailById(postId, user);
         List<String> urlList = mediaQueryRepository.getUrlList(postId);
 
-        return new PostResponse(postDetailInfo, new MediaInfo(urlList, urlList.size()));
+        return new PostResponseDto(postDetailInfo, new MediaInfo(urlList, urlList.size()));
     }
 
     @Transactional
     @CachePut(value = "posts", key = "#postId")
-    public PostIdResponse updatePost(Long userId, WritePostRequest request, Long postId) {
+    public PostIdResponseDto updatePost(Long userId, WritePostRequestDto request, Long postId) {
         Post post = postRepository.fetchPost(postId);
 
         post.validatePostWriter(userId);
@@ -77,18 +77,18 @@ public class PostService {
         storeMedia(request.getImageUrls(), request.getVideoUrl(), post);
         post.update(request);
 
-        return new PostIdResponse(post.getId());
+        return new PostIdResponseDto(post.getId());
     }
 
     @Transactional
     @CacheEvict(value = "posts", key = "#postId")
-    public PostIdResponse deletePost(Long userId, Long postId) {
+    public PostIdResponseDto deletePost(Long userId, Long postId) {
         Post post = postRepository.fetchPost(postId);
 
         post.validatePostWriter(userId);
         post.delete();
 
-        return new PostIdResponse(postId);
+        return new PostIdResponseDto(postId);
     }
 
     private void storeMedia(

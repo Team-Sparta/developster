@@ -1,6 +1,6 @@
 package com.example.developster.domain.post.main.entity;
 
-import com.example.developster.domain.post.main.dto.request.WritePostRequest;
+import com.example.developster.domain.post.main.dto.request.WritePostRequestDto;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.entity.BaseTimeEntity;
 import com.example.developster.global.exception.InvalidParamException;
@@ -49,7 +49,7 @@ public class Post extends BaseTimeEntity {
         this.isPrivate = isPrivate;
     }
 
-    public void update(WritePostRequest request) {
+    public void update(WritePostRequestDto request) {
         this.title = request.getTitle();
         this.content = request.getContent();
         this.isPrivate = request.getIsPrivate();

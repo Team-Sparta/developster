@@ -1,9 +1,9 @@
 package com.example.developster.domain.post.main.controller;
 
-import com.example.developster.domain.post.main.dto.request.WritePostRequest;
-import com.example.developster.domain.post.main.dto.response.PostIdResponse;
-import com.example.developster.domain.post.main.dto.response.PostListResponse;
-import com.example.developster.domain.post.main.dto.response.PostResponse;
+import com.example.developster.domain.post.main.dto.request.WritePostRequestDto;
+import com.example.developster.domain.post.main.dto.response.PostIdResponseDto;
+import com.example.developster.domain.post.main.dto.response.PostListResponseDto;
+import com.example.developster.domain.post.main.dto.response.PostResponseDto;
 import com.example.developster.domain.post.main.enums.PostOrderType;
 import com.example.developster.domain.post.main.service.PostService;
 import com.example.developster.domain.user.main.entity.User;
@@ -37,8 +37,8 @@ public class PostController {
             description = "새로운 게시물을 생성합니다."
     )
     @PostMapping
-    public ResponseEntity<CommonResponse<PostIdResponse>> createPost(
-            @Validated @RequestBody WritePostRequest requestDto,
+    public ResponseEntity<CommonResponse<PostIdResponseDto>> createPost(
+            @Validated @RequestBody WritePostRequestDto requestDto,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
     ) {
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, postService.createPost(user, requestDto));
@@ -59,7 +59,7 @@ public class PostController {
             description = "전체 게시물 목록을 조회한다."
     )
     @GetMapping
-    public ResponseEntity<CommonResponse<PostListResponse>> loadPostList(
+    public ResponseEntity<CommonResponse<PostListResponseDto>> loadPostList(
             @RequestParam(required = false) Long lastPostId,
             @RequestParam Integer pageSize,
             @RequestParam(required = false) PostOrderType orderBy,
@@ -77,7 +77,7 @@ public class PostController {
             description = "특정 게시물을 조회한다."
     )
     @GetMapping("/{postId}")
-    public ResponseEntity<CommonResponse<PostResponse>> loadPost(
+    public ResponseEntity<CommonResponse<PostResponseDto>> loadPost(
             @PathVariable Long postId,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
     ) {
@@ -89,9 +89,9 @@ public class PostController {
             description = "특정 게시물을 수정한다."
     )
     @PutMapping("/{postId}")
-    public ResponseEntity<CommonResponse<PostIdResponse>> updatePost(
+    public ResponseEntity<CommonResponse<PostIdResponseDto>> updatePost(
             @PathVariable Long postId,
-            @Validated @RequestBody WritePostRequest requestDto,
+            @Validated @RequestBody WritePostRequestDto requestDto,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
     ) {
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, postService.updatePost(user.getId(), requestDto, postId));
@@ -102,7 +102,7 @@ public class PostController {
             description = "특정 게시물을 삭제한다."
     )
     @DeleteMapping("/{postId}")
-    public ResponseEntity<CommonResponse<PostIdResponse>> deletePost(
+    public ResponseEntity<CommonResponse<PostIdResponseDto>> deletePost(
             @PathVariable Long postId,
             @Parameter(hidden = true) @SessionAttribute(value = AuthConstants.LOGIN_USER) User user
     ) {

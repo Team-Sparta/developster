@@ -1,6 +1,6 @@
 package com.example.developster.domain.notification.service;
 
-import com.example.developster.domain.notification.dto.NotificationResponseDto;
+import com.example.developster.domain.notification.dto.response.NotificationResponseDto;
 import com.example.developster.domain.notification.dto.request.CreateNotificationRequest;
 import com.example.developster.domain.notification.entity.Notification;
 import com.example.developster.domain.notification.enums.NotificationType;
