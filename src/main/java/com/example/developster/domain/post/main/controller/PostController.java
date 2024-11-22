@@ -54,6 +54,10 @@ public class PostController {
      * @param orderBy    Optional Sorting criteria: "UPDATED_DATE" or "LIKE_COUNT"
      * @return List of PostResponse
      */
+    @Operation(
+            summary = "게시물 목록 조회",
+            description = "전체 게시물 목록을 조회한다."
+    )
     @GetMapping
     public ResponseEntity<CommonResponse<PostListResponse>> loadPostList(
             @RequestParam(required = false) Long lastPostId,
@@ -69,8 +73,8 @@ public class PostController {
     }
 
     @Operation(
-            summary = "게시물 목록 조회",
-            description = "전체 게시물 목록을 조회한다."
+            summary = "게시물 상세 조회",
+            description = "특정 게시물을 조회한다."
     )
     @GetMapping("/{postId}")
     public ResponseEntity<CommonResponse<PostResponse>> loadPost(
