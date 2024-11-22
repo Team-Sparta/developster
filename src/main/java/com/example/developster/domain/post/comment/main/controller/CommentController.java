@@ -41,9 +41,11 @@ public class CommentController{
     public ResponseEntity<CommonResponse<CommentsSummaries>> readComments(
             @PathVariable Long postId,
             @RequestParam(required = false) Long lastId,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
+
     ){
-        CommentSummariesDetail resDetail = commentService.readComments(postId,lastId, size);
+        CommentSummariesDetail resDetail = commentService.readComments(loginUser,postId,lastId, size);
         return CommonResponse.success(SuccessCode.SUCCESS, new CommentsSummaries(resDetail));
     }
 
@@ -52,9 +54,10 @@ public class CommentController{
     public ResponseEntity<CommonResponse<RepliesSummaries>> readReplies(
             @PathVariable Long commentId,
             @RequestParam(required = false) Long lastId,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
-        RepliesSummariesDetail resDetail =  commentService.readReplies(commentId,lastId,size);
+        RepliesSummariesDetail resDetail =  commentService.readReplies(loginUser,commentId,lastId,size);
         return CommonResponse.success(SuccessCode.SUCCESS, new RepliesSummaries(resDetail));
     }
 
