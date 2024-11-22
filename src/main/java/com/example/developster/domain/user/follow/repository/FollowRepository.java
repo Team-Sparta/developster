@@ -6,6 +6,7 @@ import com.example.developster.global.exception.InvalidParamException;
 import com.example.developster.global.exception.code.ErrorCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FollowRepository extends JpaRepository <Follow, Long> {
@@ -14,4 +15,7 @@ public interface FollowRepository extends JpaRepository <Follow, Long> {
     default Follow findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() -> new InvalidParamException(ErrorCode.NOT_FOUND_FOLLOW));
     }
+
+    List<Follow> findAllByStatusAndUser_Id(Follow.Status status, Long userId);
+
 }

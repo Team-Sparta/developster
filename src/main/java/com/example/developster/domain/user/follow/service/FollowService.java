@@ -4,6 +4,7 @@ import com.example.developster.domain.notification.enums.NotificationType;
 import com.example.developster.domain.notification.service.NotificationService;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.follow.dto.AcceptFollowRequestDto;
+import com.example.developster.domain.user.follow.dto.FollowListResponseDto;
 import com.example.developster.domain.user.follow.dto.UserFollowRequestDto;
 import com.example.developster.domain.user.follow.entity.Follow;
 import com.example.developster.domain.user.follow.repository.FollowRepository;
@@ -13,7 +14,10 @@ import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.code.ErrorCode;
 import org.springframework.stereotype.Service;
 
+import java.net.ResponseCache;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static io.micrometer.common.util.StringUtils.truncate;
 
@@ -79,7 +83,14 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    private void sendFollowNotification(User sender, User followedUser, Long followId) {
+    public FollowListResponseDto followList(User user) {
+
+        List<Follow> follows = followRepository.findAllByStatusAndUser_Id(Follow.Status.ACCEPT, user.getId());
+
+        return new FollowListResponseDto(follows);
+    }
+
+    private void sendFollowNotification(User user, User followedUser, Long followId) {
         String message;
         if (followedUser.getPublic_status()) {
             message = sender.getName() + "님이 " + followedUser.getName() + "님을 팔로우합니다.";
