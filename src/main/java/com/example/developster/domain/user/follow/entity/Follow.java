@@ -16,6 +16,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "follows")
 public class Follow {
+
+    public enum Status {
+        REQUEST, ACCEPT;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "BIGINT UNSIGNED")
@@ -35,11 +40,20 @@ public class Follow {
     @Column(name = "followed_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime followedAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'ACCEPT'")
+    Status status;
+
     @Builder
-    public Follow(User user, User followedUser) {
+    public Follow(User user, User followedUser, Status status) {
         this.user = user;
         this.followedUser = followedUser;
         this.followedAt = LocalDateTime.now();
+        this.status = status;
+    }
+
+    public void accept(Follow follow) {
+        this.status = Status.ACCEPT;
     }
 
 

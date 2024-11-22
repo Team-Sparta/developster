@@ -3,6 +3,7 @@ package com.example.developster.domain.user.follow.service;
 import com.example.developster.domain.notification.enums.NotificationType;
 import com.example.developster.domain.notification.service.NotificationService;
 import com.example.developster.domain.post.main.entity.Post;
+import com.example.developster.domain.user.follow.dto.AcceptFollowRequestDto;
 import com.example.developster.domain.user.follow.dto.UserFollowRequestDto;
 import com.example.developster.domain.user.follow.entity.Follow;
 import com.example.developster.domain.user.follow.repository.FollowRepository;
@@ -33,10 +34,22 @@ public class FollowService {
 
         User followedUser = userRepository.findByIdOrElseThrow(userFollowRequestDto.getId());
 
-        Follow follow = Follow.builder().user(user).followedUser(followedUser).build();
-//        Follow savedfollow = followRepository.save(follow);
+        Follow follow;
+        if (followedUser.getPublic_status()) {
+            follow = Follow.builder()
+                    .user(user)
+                    .followedUser(followedUser)
+                    .status(Follow.Status.ACCEPT).build();
+        } else {
+            follow = Follow.builder()
+                    .user(user)
+                    .followedUser(followedUser)
+                    .status(Follow.Status.REQUEST).build();
+        }
 
-//        sendFollowNotification(user, followedUser, savedfollow.getId());
+        Follow savedfollow = followRepository.save(follow);
+
+        sendFollowNotification(user, followedUser, savedfollow.getId());
 
     }
 
@@ -49,6 +62,21 @@ public class FollowService {
         }
 
         followRepository.delete(follow.get());
+    }
+
+
+    public void acceptFollow(AcceptFollowRequestDto followAcceptRequestDto, User user) {
+        Follow follow = followRepository.findByIdOrElseThrow(followAcceptRequestDto.getId());
+
+
+        follow.accept(follow);
+    }
+
+    public void refuseFollow(AcceptFollowRequestDto followAcceptRequestDto, User user) {
+
+        Follow follow = followRepository.findByIdOrElseThrow(followAcceptRequestDto.getId());
+
+        followRepository.delete(follow);
     }
 
     private void sendFollowNotification(User user, User followedUser, Long followId) {

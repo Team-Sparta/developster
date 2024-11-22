@@ -1,5 +1,6 @@
 package com.example.developster.domain.user.follow.controller;
 
+import com.example.developster.domain.user.follow.dto.AcceptFollowRequestDto;
 import com.example.developster.domain.user.follow.dto.UserFollowRequestDto;
 import com.example.developster.domain.user.follow.service.FollowService;
 import com.example.developster.domain.user.main.entity.User;
@@ -35,5 +36,23 @@ public class FollowController {
         followService.unfollow(user, followUserId);
 
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE);
+    }
+
+    @PostMapping("/accept")
+    public ResponseEntity<CommonResponse<Object>> acceptFollow(@RequestBody AcceptFollowRequestDto followAcceptRequestDto,
+                                                             @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+
+        followService.acceptFollow(followAcceptRequestDto, user);
+
+        return CommonResponse.success(SuccessCode.SUCCESS_INSERT);
+    }
+
+    @DeleteMapping("/accept")
+    public ResponseEntity<CommonResponse<Object>> refuseFollow(@RequestBody AcceptFollowRequestDto followAcceptRequestDto,
+                                                               @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+
+        followService.refuseFollow(followAcceptRequestDto, user);
+
+        return CommonResponse.success(SuccessCode.SUCCESS_INSERT);
     }
 }
