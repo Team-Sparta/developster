@@ -19,7 +19,7 @@ public class BookmarkService {
     private final PostJpaRepository postJpaRepository;
 
     public void savePost(User user, Long postId) {
-        Post post = postJpaRepository.findByIdOrElseThrow(postId);
+        Post post = postJpaRepository.fetchPost(postId);
         Optional<PostBookmark> postBookmark = postBookmarkJpaRepository.findByUserAndPost(user, post);
 
         if (postBookmark.isEmpty()) {
@@ -30,7 +30,7 @@ public class BookmarkService {
     }
 
     public void unSavePost(User user, Long postId) {
-        Post post = postJpaRepository.findByIdOrElseThrow(postId);
+        Post post = postJpaRepository.fetchPost(postId);
         Optional<PostBookmark> postBookmark = postBookmarkJpaRepository.findByUserAndPost(user, post);
 
         if (postBookmark.isEmpty()) {
