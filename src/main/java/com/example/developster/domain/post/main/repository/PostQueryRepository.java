@@ -8,6 +8,7 @@ import com.example.developster.domain.post.main.entity.QPost;
 import com.example.developster.domain.post.main.enums.PostOrderType;
 import com.example.developster.domain.post.media.dto.MediaInfo;
 import com.example.developster.domain.post.media.repository.MediaQueryRepository;
+import com.example.developster.domain.user.follow.entity.Follow;
 import com.example.developster.domain.user.follow.entity.QFollow;
 import com.example.developster.domain.user.main.dto.UserInfoDto;
 import com.example.developster.domain.user.main.entity.User;
@@ -172,7 +173,8 @@ public class PostQueryRepository {
                 .selectFrom(follow)
                 .where(
                         follow.user.eq(user),  // Check if the user follows
-                        follow.followedUser.eq(post.user)  // The post's author is the followed user
+                        follow.followedUser.eq(post.user),  // The post's author is the followed user
+                        follow.status.eq(Follow.Status.ACCEPT) // Ensure follow status is ACCEPT
                 )
                 .exists();
 

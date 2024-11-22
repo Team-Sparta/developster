@@ -16,7 +16,10 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
     // 인증을 하지 않아도될 URL Path 배열
     private static final String[] WHITE_LIST = {
-            "/users/*", "/swagger-ui/**", "/api-docs/**", // Ensure Swagger docs are excluded
+            "/users/*",
+            "/swagger-ui/**",   // Swagger UI resources
+            "/v3/api-docs/**",  // OpenAPI spec resources (for Swagger)
+            "/api-docs/**"
     };
 
     @Override
