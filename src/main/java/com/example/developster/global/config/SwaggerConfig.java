@@ -28,8 +28,8 @@ public class SwaggerConfig {
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Schedule")
-                        .description("Schedule REST API")
+                        .title("Developster")
+                        .description("Developster REST API")
                         .version("v1"));
     }
 

@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(
@@ -36,7 +37,7 @@ public class UserController {
             summary = "회원가입"
     )
     @PostMapping("/sign-up")
-    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@RequestBody UserCreateRequestDto userRequestDto) {
+    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@Validated @RequestBody UserCreateRequestDto userRequestDto) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, userService.createUser(userRequestDto));
     }
@@ -45,7 +46,7 @@ public class UserController {
             summary = "로그인"
     )
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse<UserIdResponseDto>> loginUser(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
+    public ResponseEntity<CommonResponse<UserIdResponseDto>> loginUser(@Validated @RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
         User loginedUser = userService.loginUser(loginRequestDto);
 
         HttpSession session = request.getSession();
@@ -69,7 +70,7 @@ public class UserController {
             summary = "프로필 수정"
     )
     @PatchMapping
-    public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
+    public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@Validated @RequestBody UserUpdateRequestDto userUpdateRequestDto,
                                                                         @Parameter(hidden = true) @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, userService.updateUser(userUpdateRequestDto, user));

@@ -1,4 +1,4 @@
-package com.example.developster.domain.post.comment.main.dto;
+package com.example.developster.domain.post.comment.main.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
