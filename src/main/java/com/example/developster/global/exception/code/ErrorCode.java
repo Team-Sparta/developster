@@ -47,7 +47,7 @@ public enum ErrorCode {
     /**
      * Follow
      */
-    NOT_FOUND_FOLLOW(HttpStatus.BAD_REQUEST, "팔로우하지 않은 유저입니다."),
+    NOT_FOUND_FOLLOW(HttpStatus.NOT_FOUND, "팔로우 정보를 찾을 수 없습니다."),
 
 
     /**
