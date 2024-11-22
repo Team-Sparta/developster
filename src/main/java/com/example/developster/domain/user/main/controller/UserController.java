@@ -36,7 +36,7 @@ public class UserController {
             summary = "회원가입"
     )
     @PostMapping("/sign-up")
-    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@Parameter(hidden = true) @RequestBody UserCreateRequestDto userRequestDto) {
+    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@RequestBody UserCreateRequestDto userRequestDto) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, userService.createUser(userRequestDto));
     }
@@ -45,7 +45,7 @@ public class UserController {
             summary = "로그인"
     )
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse<UserIdResponseDto>> loginUser(@Parameter(hidden = true) @RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
+    public ResponseEntity<CommonResponse<UserIdResponseDto>> loginUser(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
         User loginedUser = userService.loginUser(loginRequestDto);
 
         HttpSession session = request.getSession();
@@ -59,7 +59,7 @@ public class UserController {
             summary = "내정보 조회"
     )
     @GetMapping
-    public ResponseEntity<CommonResponse<UserResponseDto>> getUser(@SessionAttribute(AuthConstants.LOGIN_USER) User user) {
+    public ResponseEntity<CommonResponse<UserResponseDto>> getUser(@Parameter(hidden = true) @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
 
         return CommonResponse.success(SuccessCode.SUCCESS, UserResponseDto.toDto(user));
     }
@@ -69,8 +69,8 @@ public class UserController {
             summary = "프로필 수정"
     )
     @PatchMapping
-    public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@Parameter(hidden = true) @RequestBody UserUpdateRequestDto userUpdateRequestDto,
-                                                                        @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
+    public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
+                                                                        @Parameter(hidden = true) @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, userService.updateUser(userUpdateRequestDto, user));
     }
@@ -79,8 +79,8 @@ public class UserController {
             summary = "회원 탈퇴"
     )
     @DeleteMapping
-    public ResponseEntity<CommonResponse<UserDeleteResponseDto>> deleteUser(@Parameter(hidden = true) @RequestBody UserDeleteRequestDto userDeleteRequestDto,
-                                                                            @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
+    public ResponseEntity<CommonResponse<UserDeleteResponseDto>> deleteUser(@RequestBody UserDeleteRequestDto userDeleteRequestDto,
+                                                                            @Parameter(hidden = true) @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE, userService.delete(userDeleteRequestDto, user));
     }
