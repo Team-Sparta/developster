@@ -49,7 +49,7 @@ public class PostService {
 
         Post save = postRepository.save(newPost);
 
-        storeImageList(request.getImageUrls(), save);
+        storeMedia(request.getImageUrls(), request.getVideoUrl(), save);
 
         return new PostIdResponse(save.getId());
     }
@@ -75,6 +75,11 @@ public class PostService {
         Post post = postRepository.fetchPost(postId);
 
         post.validatePostWriter(userId);
+
+        final List<Media> mediaList = mediaQueryRepository.getMediaList(post.getId());
+        mediaList.forEach(Media::delete);
+
+        storeMedia(request.getImageUrls(), request.getVideoUrl(), post);
         post.update(request);
 
         return new PostIdResponse(post.getId());
@@ -91,13 +96,15 @@ public class PostService {
         return new PostIdResponse(postId);
     }
 
-    private void storeImageList(
+    private void storeMedia(
             final List<String> imageUrls,
+            final String videoUrl,
             final Post post
     ) {
         for (String imageUrl : imageUrls) {
             Media media = Media.create(post, imageUrl);
             mediaRepository.save(media);
         }
+        mediaRepository.save(Media.create(post, videoUrl));
     }
 }
