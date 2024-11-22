@@ -1,5 +1,6 @@
 package com.example.developster.domain.post.comment.main.entity;
 
+import com.example.developster.domain.post.comment.like.entity.CommentLike;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.entity.BaseTimeEntity;
@@ -46,8 +47,11 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "user_id", columnDefinition = "BIGINT UNSIGNED comment '유저 고유 번호'")
     private User user;
 
-    @OneToMany(mappedBy = "parentComment")
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
     List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    List<CommentLike> commentLikeList = new ArrayList<>();
 
     @Builder
     public Comment(String contents, User user, Post post, Comment comment){

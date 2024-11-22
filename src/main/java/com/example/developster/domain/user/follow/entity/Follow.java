@@ -26,7 +26,7 @@ public class Follow {
     @Column(name = "id", columnDefinition = "BIGINT UNSIGNED")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @NotNull
     @JoinColumn(name = "user_id", columnDefinition = "BIGINT UNSIGNED")
     private User user;

@@ -1,6 +1,10 @@
 package com.example.developster.domain.post.main.entity;
 
+import com.example.developster.domain.post.bookmark.entity.PostBookmark;
+import com.example.developster.domain.post.comment.main.entity.Comment;
+import com.example.developster.domain.post.like.entity.PostLike;
 import com.example.developster.domain.post.main.dto.request.WritePostRequestDto;
+import com.example.developster.domain.post.media.entity.Media;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.entity.BaseTimeEntity;
 import com.example.developster.global.exception.InvalidParamException;
@@ -13,6 +17,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -39,6 +45,18 @@ public class Post extends BaseTimeEntity {
 
     @Column(name = "is_private", nullable = false, columnDefinition = "BOOLEAN comment '내용'")
     private Boolean isPrivate;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    List<PostLike> postLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE,orphanRemoval = true)
+    List<Media> mediaList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE,orphanRemoval = true)
+    List<PostBookmark> bookmarkList = new ArrayList<>();
 
     @Builder
     public Post(Long id, @NotNull User user, @NotNull String title, @NotNull String content, @NotNull Boolean isPrivate) {
