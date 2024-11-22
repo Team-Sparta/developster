@@ -32,11 +32,6 @@ public class User extends BaseTimeEntity {
         BLOCKED, ACTIVE, INACTIVE, WITHDRAWAL;
     }
 
-    public enum PublicStatus {
-        PUBLIC, PRIVATE;
-    }
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "BIGINT UNSIGNED comment '회원 고유 번호'")
@@ -59,14 +54,14 @@ public class User extends BaseTimeEntity {
     String profile;
 
     @Column
-    Boolean public_status = true;
+    Boolean publicStatus = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'active'")
     Status status;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'role_admin'")
+    @Column(name = "role", columnDefinition = "VARCHAR(255) DEFAULT 'role_user'")
     Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,orphanRemoval = true)
