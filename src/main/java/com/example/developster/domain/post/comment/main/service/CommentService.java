@@ -49,29 +49,15 @@ public class CommentService {
                 .comment(comment)
                 .contents(dto.getContents())
                 .build();
-        log.info("parent id: {}",parentId);
+        log.info("parent id: {}", parentId);
         Comment savedComment = commentRepository.save(newComment);
         log.info("user name: {}", savedComment.getUser().getName());
-        sendLikeNotification(loginUser, post, newComment);
+        sendCommentNotification(loginUser, post, newComment);
         return new CommentCreateResponseDto(savedComment);
     }
 
-    public CommentSummariesDetail readComments(User user,Long postId, Long lastId, int size) {
-//        Pageable pageable = PageRequest.of(0, size);
-//
-//        boolean isFirst = (lastId == null || lastId == Long.MAX_VALUE);
-//
-//        if (lastId == null) {
-//            lastId = Long.MAX_VALUE;
-//        }
-
-//        List<Comment> comments = commentRepository.readComments(postId, lastId, pageable);
+    public CommentSummariesDetail readComments(User user, Long postId, Long lastId, int size) {
         Slice<CommentDetailInfo> allComments = commentQueryRepository.getAllComments(user, lastId, size);
-//        List<CommentReadResponseDto> dtoList = comments.stream().map(CommentReadResponseDto::new).toList();
-
-//        boolean isLast = comments.size() < size;
-
-//        return new CommentSummariesDetail(isFirst,isLast,size,dtoList);
         return new CommentSummariesDetail(allComments);
     }
 
@@ -87,7 +73,7 @@ public class CommentService {
         Long writerId = comment.getUser().getId();
 
         //틀리면
-        if(!Objects.equals(writerId, loginUser.getId())){
+        if (!Objects.equals(writerId, loginUser.getId())) {
             throw new BaseException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
         comment.setContents(dto.getContents());
@@ -102,19 +88,22 @@ public class CommentService {
         Long writerId = comment.getUser().getId();
 
         //틀리면
-        if(!Objects.equals(writerId, loginUser.getId())){
+        if (!Objects.equals(writerId, loginUser.getId())) {
             throw new BaseException(ErrorCode.UNAUTHORIZED_ACCESS);
         }
         comment.delete();
     }
 
-    private void sendLikeNotification(User liker, Post post, Comment comment) {
-        String message = liker.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 댓글을 달았습니다.";
+    private void sendCommentNotification(User sender, Post post, Comment comment) {
+        System.out.println("recipient_id: " + comment.getUser().getId().toString());
+        System.out.println("sender_id: " + sender.getId().toString());
+
+        String message = sender.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 댓글을 달았습니다.";
         notificationService.sendNotification(
-                liker,
                 comment.getUser(),
-                comment.getId(),
+                sender,
                 message,
+                comment.getId(),
                 NotificationType.COMMENT
         );
     }

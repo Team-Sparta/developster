@@ -79,19 +79,19 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    private void sendFollowNotification(User user, User followedUser, Long followId) {
+    private void sendFollowNotification(User sender, User followedUser, Long followId) {
         String message;
         if (followedUser.getPublic_status()) {
-            message = user.getName() + "님이 " + followedUser.getName() + "님을 팔로우합니다.";
+            message = sender.getName() + "님이 " + followedUser.getName() + "님을 팔로우합니다.";
         } else {
-            message = user.getName() + "님이 " + followedUser.getName() + "님에게 팔로우를 요청했습니다.";
+            message = sender.getName() + "님이 " + followedUser.getName() + "님에게 팔로우를 요청했습니다.";
         }
 
         notificationService.sendNotification(
-                user,
                 followedUser,
-                followId,
+                sender,
                 message,
+                followId,
                 NotificationType.COMMENT
         );
     }

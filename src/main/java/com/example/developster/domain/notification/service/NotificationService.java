@@ -34,6 +34,8 @@ public class NotificationService {
 
     public SseEmitter subscribe(User user, String lastEventId) {
         Long userId = user.getId();
+        System.out.println("user_id: " + userId);
+        log.info("userId", userId.toString());
         String emitterId = makeTimeIncludeId(userId);
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
 
@@ -109,7 +111,7 @@ public class NotificationService {
         return userId + "_" + System.currentTimeMillis();
     }
 
-    public void sendNotification(User recipient, User sender, Long referenceId, String message, NotificationType type) {
+    public void sendNotification(User recipient, User sender, String message, Long referenceId, NotificationType type) {
         Notification newNotification = Notification.builder()
                 .recipient(recipient)
                 .sender(sender)
@@ -118,15 +120,21 @@ public class NotificationService {
                 .type(type)
                 .build();
 
-        notificationRepository.save(newNotification);
-        String eventId = makeTimeIncludeId(referenceId);
+        Long recipientId = recipient.getId();
 
-        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(referenceId));
+        Notification save = notificationRepository.save(newNotification);
+
+        NotificationResponseDto dto = NotificationResponseDto.toDto(save);
+        String eventId = makeTimeIncludeId(recipientId);
+
+
+
+        Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(String.valueOf(recipientId));
         emitters.forEach(
                 (key, emitter) -> {
-                    emitterRepository.saveEventCache(key, newNotification);
+                    emitterRepository.saveEventCache(key, dto);
                     sendToClient(emitter, eventId,
-                            newNotification);
+                            dto);
                 }
         );
     }

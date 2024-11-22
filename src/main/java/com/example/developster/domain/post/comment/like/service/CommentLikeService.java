@@ -53,7 +53,7 @@ public class CommentLikeService {
                 .build();
 
         likeRepository.save(like);
-        sendLikeNotification(user,comment);
+        sendCommentLikeNotification(user,comment);
     }
 
     @Transactional
@@ -68,13 +68,13 @@ public class CommentLikeService {
         CommentLike commentLike = likeRepository.findByComment_IdAndUser_IdOrElseThrow(commentId, user.getId());
         commentLike.setIsLike(false);
     }
-    private void sendLikeNotification(User liker, Comment comment) {
-        String message = liker.getName() + "님이 " + truncate(comment.getContents(), 20) + "에 좋아요를 눌렀습니다.";
+    private void sendCommentLikeNotification(User sender, Comment comment) {
+        String message = sender.getName() + "님이 " + truncate(comment.getContents(), 20) + "에 좋아요를 눌렀습니다.";
         notificationService.sendNotification(
-                liker,
                 comment.getUser(),
-                comment.getId(),
+                sender,
                 message,
+                comment.getId(),
                 NotificationType.COMMENT_LIKE
         );
     }

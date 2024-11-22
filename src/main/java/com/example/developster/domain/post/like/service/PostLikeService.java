@@ -28,6 +28,7 @@ public class PostLikeService {
     @Transactional
     public void likePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
+        System.out.println("recipient_id: " + post.getUser().getId().toString());
 
         post.reverseValidatePostWriter(user.getId());
 
@@ -37,12 +38,12 @@ public class PostLikeService {
             throw new BaseException(ErrorCode.ALREADY_LIKED_POST);
         }
 
-        postLike.setIsLiked(true);
-        postLikeJpaRepository.save(postLike);
-
         if (postLike.getCreatedAt() == null) {
             sendLikeNotification(user, post);
         }
+
+        postLike.setIsLiked(true);
+        postLikeJpaRepository.save(postLike);
     }
 
     @Transactional
@@ -62,13 +63,16 @@ public class PostLikeService {
     /**
      * Sends a notification for a post like.
      */
-    private void sendLikeNotification(User liker, Post post) {
-        String message = liker.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 좋아요를 눌렀습니다.";
+    private void sendLikeNotification(User sender, Post post) {;
+
+        System.out.println("sender_id: " + sender.getId().toString());
+
+        String message = sender.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 좋아요를 눌렀습니다.";
         notificationService.sendNotification(
-                liker,
                 post.getUser(),
-                post.getId(),
+                sender,
                 message,
+                post.getId(),
                 NotificationType.POST_LIKE
         );
     }
