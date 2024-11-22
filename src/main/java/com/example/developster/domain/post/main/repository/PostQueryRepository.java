@@ -166,7 +166,7 @@ public class PostQueryRepository {
 
     private BooleanExpression isAuthorPublicOrFollowEachOther(QPost post, User user) {
         // If the post is public, the user can see it
-        BooleanExpression isAuthorPublic = post.user.public_status.isTrue();
+        BooleanExpression isAuthorPublic = post.user.publicStatus.isTrue();
 
         // If the post is private, check if the user follows the author or is the author themselves
         BooleanExpression isUserFollowing = jpaQueryFactory

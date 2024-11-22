@@ -83,7 +83,7 @@ public class User extends BaseTimeEntity {
         this.bio = bio;
         this.profile = profile;
 
-        this.public_status = true;
+        this.publicStatus = true;
 
         this.role = Role.ROLE_ADMIN;
         this.status = Status.ACTIVE;
@@ -94,9 +94,9 @@ public class User extends BaseTimeEntity {
         this.bio = req.getBio();
         this.profile = req.getProfile();
         if(req.getPublicStatus()!= null && Objects.equals(req.getPublicStatus(),"public")) {
-            this.public_status = true;
+            this.publicStatus = true;
         } else if (req.getPublicStatus()!= null && Objects.equals(req.getPublicStatus(),"private")) {
-            this.public_status = false;
+            this.publicStatus = false;
         }
     }
 

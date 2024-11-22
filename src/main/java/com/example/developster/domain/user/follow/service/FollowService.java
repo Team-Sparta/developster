@@ -37,7 +37,7 @@ public class FollowService {
         User followedUser = userRepository.findByIdOrElseThrow(userFollowRequestDto.getId());
 
         Follow follow;
-        if (followedUser.getPublic_status()) {
+        if (followedUser.getPublicStatus()) {
             follow = Follow.builder()
                     .user(user)
                     .followedUser(followedUser)
@@ -92,7 +92,7 @@ public class FollowService {
 
     private void sendFollowNotification(User user, User followedUser, Long followId) {
         String message;
-        if (followedUser.getPublic_status()) {
+        if (followedUser.getPublicStatus()) {
             message = user.getName() + "님이 " + followedUser.getName() + "님을 팔로우합니다.";
         } else {
             message = user.getName() + "님이 " + followedUser.getName() + "님에게 팔로우를 요청했습니다.";
