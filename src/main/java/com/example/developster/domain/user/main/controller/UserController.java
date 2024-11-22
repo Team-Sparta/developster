@@ -12,12 +12,19 @@ import com.example.developster.domain.user.main.service.UserService;
 import com.example.developster.global.constants.AuthConstants;
 import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(
+        name = "회원 API",
+        description = "로그인, 회원가입, 프로필 수정 관련 API"
+)
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -25,14 +32,20 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(
+            summary = "회원가입"
+    )
     @PostMapping("/sign-up")
-    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@RequestBody UserCreateRequestDto userRequestDto){
+    public ResponseEntity<CommonResponse<UserResponseDto>> signUpUser(@Parameter(hidden = true) @RequestBody UserCreateRequestDto userRequestDto) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_INSERT, userService.createUser(userRequestDto));
     }
 
+    @Operation(
+            summary = "로그인"
+    )
     @PostMapping("/login")
-    public ResponseEntity<CommonResponse<UserIdResponseDto>> loginUser(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
+    public ResponseEntity<CommonResponse<UserIdResponseDto>> loginUser(@Parameter(hidden = true) @RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
         User loginedUser = userService.loginUser(loginRequestDto);
 
         HttpSession session = request.getSession();
@@ -42,25 +55,32 @@ public class UserController {
         return CommonResponse.success(SuccessCode.SUCCESS, new UserIdResponseDto(loginedUser.getId()));
     }
 
+    @Operation(
+            summary = "내정보 조회"
+    )
     @GetMapping
-    public ResponseEntity<CommonResponse<UserResponseDto>> getUser(@SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+    public ResponseEntity<CommonResponse<UserResponseDto>> getUser(@SessionAttribute(AuthConstants.LOGIN_USER) User user) {
 
         return CommonResponse.success(SuccessCode.SUCCESS, UserResponseDto.toDto(user));
     }
 
 
-
+    @Operation(
+            summary = "프로필 수정"
+    )
     @PatchMapping
-    public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@RequestBody UserUpdateRequestDto userUpdateRequestDto,
-                                                                        @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+    public ResponseEntity<CommonResponse<UserIdResponseDto>> updateUser(@Parameter(hidden = true) @RequestBody UserUpdateRequestDto userUpdateRequestDto,
+                                                                        @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_UPDATE, userService.updateUser(userUpdateRequestDto, user));
     }
 
-
+    @Operation(
+            summary = "회원 탈퇴"
+    )
     @DeleteMapping
-    public ResponseEntity<CommonResponse<UserDeleteResponseDto>> deleteUser(@RequestBody UserDeleteRequestDto userDeleteRequestDto,
-                                                                            @SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+    public ResponseEntity<CommonResponse<UserDeleteResponseDto>> deleteUser(@Parameter(hidden = true) @RequestBody UserDeleteRequestDto userDeleteRequestDto,
+                                                                            @SessionAttribute(AuthConstants.LOGIN_USER) User user) {
 
         return CommonResponse.success(SuccessCode.SUCCESS_DELETE, userService.delete(userDeleteRequestDto, user));
     }
