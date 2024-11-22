@@ -46,7 +46,7 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "user_id", columnDefinition = "BIGINT UNSIGNED comment '유저 고유 번호'")
     private User user;
 
-    @OneToMany(mappedBy = "parentComment")
+    @OneToMany(mappedBy = "parentComment", orphanRemoval = true)
     List<Comment> commentList = new ArrayList<>();
 
     @Builder
