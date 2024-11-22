@@ -78,7 +78,7 @@ public class PostQueryRepository {
                                 .select(postDetailInfoProjection(user))
                                 .from(post)
                                 .leftJoin(comment).on(comment.post.eq(post).and(comment.deletedAt.isNull()))
-                                .leftJoin(postLike).on(postLike.post.eq(post))
+                                .leftJoin(postLike).on(postLike.post.eq(post).and(postLike.isLiked.isTrue()))
                                 .where(
                                         post.id.eq(postId),
                                         isNotPrivateOrAuthor(post, user),
