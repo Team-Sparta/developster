@@ -1,6 +1,7 @@
 package com.example.developster.domain.user.follow.controller;
 
 import com.example.developster.domain.user.follow.dto.AcceptFollowRequestDto;
+import com.example.developster.domain.user.follow.dto.FollowListResponseDto;
 import com.example.developster.domain.user.follow.dto.UserFollowRequestDto;
 import com.example.developster.domain.user.follow.service.FollowService;
 import com.example.developster.domain.user.main.entity.User;
@@ -8,6 +9,8 @@ import com.example.developster.global.constants.AuthConstants;
 import com.example.developster.global.exception.code.SuccessCode;
 import com.example.developster.global.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.persistence.GeneratedValue;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +47,7 @@ public class FollowController {
 
         followService.acceptFollow(followAcceptRequestDto, user);
 
-        return CommonResponse.success(SuccessCode.SUCCESS_INSERT);
+        return CommonResponse.success(SuccessCode.SUCCESS);
     }
 
     @DeleteMapping("/accept")
@@ -53,6 +56,12 @@ public class FollowController {
 
         followService.refuseFollow(followAcceptRequestDto, user);
 
-        return CommonResponse.success(SuccessCode.SUCCESS_INSERT);
+        return CommonResponse.success(SuccessCode.SUCCESS);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<CommonResponse<FollowListResponseDto>> followList(@SessionAttribute (AuthConstants.LOGIN_USER) User user) {
+
+        return CommonResponse.success(SuccessCode.SUCCESS, followService.followList(user));
     }
 }
