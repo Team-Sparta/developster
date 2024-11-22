@@ -34,8 +34,6 @@ public class NotificationService {
 
     public SseEmitter subscribe(User user, String lastEventId) {
         Long userId = user.getId();
-        System.out.println("user_id: " + userId);
-        log.info("userId", userId.toString());
         String emitterId = makeTimeIncludeId(userId);
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(DEFAULT_TIMEOUT));
 

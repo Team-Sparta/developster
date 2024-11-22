@@ -28,7 +28,6 @@ public class PostLikeService {
     @Transactional
     public void likePost(User user, Long postId) {
         Post post = postJpaRepository.fetchPost(postId);
-        System.out.println("recipient_id: " + post.getUser().getId().toString());
 
         post.reverseValidatePostWriter(user.getId());
 
@@ -64,9 +63,6 @@ public class PostLikeService {
      * Sends a notification for a post like.
      */
     private void sendLikeNotification(User sender, Post post) {;
-
-        System.out.println("sender_id: " + sender.getId().toString());
-
         String message = sender.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 좋아요를 눌렀습니다.";
         notificationService.sendNotification(
                 post.getUser(),

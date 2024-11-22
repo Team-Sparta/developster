@@ -1,10 +1,12 @@
 package com.example.developster.domain.user.follow.service;
 
+import com.example.developster.domain.notification.dto.NotificationResponseDto;
 import com.example.developster.domain.notification.enums.NotificationType;
 import com.example.developster.domain.notification.service.NotificationService;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.follow.dto.AcceptFollowRequestDto;
 import com.example.developster.domain.user.follow.dto.FollowListResponseDto;
+import com.example.developster.domain.user.follow.dto.FollowResponseSummaryDto;
 import com.example.developster.domain.user.follow.dto.UserFollowRequestDto;
 import com.example.developster.domain.user.follow.entity.Follow;
 import com.example.developster.domain.user.follow.repository.FollowRepository;
@@ -87,7 +89,9 @@ public class FollowService {
 
         List<Follow> follows = followRepository.findAllByStatusAndUser_Id(Follow.Status.ACCEPT, user.getId());
 
-        return new FollowListResponseDto(follows);
+        List<FollowResponseSummaryDto> list = follows.stream().map(FollowResponseSummaryDto::toDto).toList();
+
+        return new FollowListResponseDto(list);
     }
 
     private void sendFollowNotification(User user, User followedUser, Long followId) {
