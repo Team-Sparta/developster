@@ -110,7 +110,7 @@ public class UserService {
 
         user.delete();
 
-        return new UserDeleteResponseDto(user.getId(), user.getDeletedAt());
+        return new UserDeleteResponseDto(user.getId());
     }
 
 

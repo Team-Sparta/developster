@@ -8,11 +8,9 @@ import java.time.LocalDateTime;
 public class UserDeleteResponseDto {
 
     private final Long id;
-    private final LocalDateTime status;
 
     @Builder
-    public UserDeleteResponseDto(Long id, LocalDateTime status) {
+    public UserDeleteResponseDto(Long id) {
         this.id = id;
-        this.status = status;
     }
 }
