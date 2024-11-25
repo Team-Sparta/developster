@@ -28,5 +28,4 @@ public record CommonResponse<T>(
     public static <T> ResponseEntity<CommonResponse<T>> fail(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponse<>(false, exception.getMessage(), null));
     }
-
 }
