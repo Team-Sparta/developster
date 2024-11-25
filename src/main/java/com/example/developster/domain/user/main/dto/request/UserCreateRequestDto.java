@@ -1,11 +1,8 @@
 package com.example.developster.domain.user.main.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
 public record UserCreateRequestDto(
         @NotBlank String name,
         @NotBlank String email,
