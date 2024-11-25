@@ -13,6 +13,6 @@ public interface PostLikeJpaRepository extends JpaRepository<PostLike, Long> {
 
     default PostLike fetchOrCreatePostLike(User user, Post post) {
         return findByUserAndPost(user, post)
-                .orElse(PostLike.create(user, post, false));
+                .orElse(PostLike.builder().user(user).post(post).build());
     }
 }

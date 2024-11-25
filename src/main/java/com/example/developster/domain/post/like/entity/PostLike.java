@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
@@ -37,12 +36,11 @@ public class PostLike extends BaseCreatedTimeEntity {
     @Column(name = "is_liked", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE comment '게시물 좋아요 여부'")
     private Boolean isLiked = true;
 
-    public static PostLike create(@NotNull User user, @NotNull Post post, @NotNull Boolean isLiked) {
-        return PostLike.builder()
-                .user(user)
-                .post(post)
-                .isLiked(isLiked)
-                .build();
+    @Builder
+    public PostLike(@NotNull User user, @NotNull Post post, @NotNull Boolean isLiked) {
+        this.user = user;
+        this.post = post;
+        this.isLiked = isLiked;
     }
 }
 
