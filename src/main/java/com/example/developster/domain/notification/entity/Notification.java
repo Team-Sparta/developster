@@ -6,6 +6,7 @@ import com.example.developster.global.entity.BaseCreatedTimeEntity;
 import com.example.developster.global.exception.InvalidParamException;
 import com.example.developster.global.exception.code.ErrorCode;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,7 +52,7 @@ public class Notification extends BaseCreatedTimeEntity {
 
 
     @Builder
-    public Notification(Long id, @NotNull String message, @NotNull User recipient, User sender, @NotNull NotificationType type, @NotNull Long referenceId) {
+    public Notification(Long id, @NotBlank String message, @NotNull User recipient, User sender, @NotNull NotificationType type, @NotNull Long referenceId) {
         this.id = id;
         this.message = message;
         this.recipient = recipient;

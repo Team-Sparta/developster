@@ -73,8 +73,6 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE,orphanRemoval = true)
     List<Follow> followList = new ArrayList<>();
 
-
-
     @Builder
     public User(String name, String email, String password, String bio, String profile) {
         this.name = name;
@@ -82,9 +80,7 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.bio = bio;
         this.profile = profile;
-
         this.publicStatus = true;
-
         this.role = Role.ROLE_ADMIN;
         this.status = Status.ACTIVE;
     }

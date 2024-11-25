@@ -2,7 +2,7 @@ package com.example.developster.domain.post.main.repository;
 
 import com.example.developster.domain.post.comment.main.entity.QComment;
 import com.example.developster.domain.post.like.entity.QPostLike;
-import com.example.developster.domain.post.main.dto.PostDetailInfo;
+import com.example.developster.domain.post.main.dto.PostDetailInfoDto;
 import com.example.developster.domain.post.main.dto.response.PostResponseDto;
 import com.example.developster.domain.post.main.entity.QPost;
 import com.example.developster.domain.post.main.enums.PostOrderType;
@@ -58,9 +58,9 @@ public class PostQueryRepository {
     }
 
     // Simplified method to handle the PostDetailInfo projection
-    private ConstructorExpression<PostDetailInfo> postDetailInfoProjection(User user) {
+    private ConstructorExpression<PostDetailInfoDto> postDetailInfoProjection(User user) {
         return Projections.constructor(
-                PostDetailInfo.class,
+                PostDetailInfoDto.class,
                 post.id,
                 post.title,
                 post.content,
@@ -73,7 +73,7 @@ public class PostQueryRepository {
         );
     }
 
-    public PostDetailInfo getPostDetailById(Long postId, User user) {
+    public PostDetailInfoDto getPostDetailById(Long postId, User user) {
         return Optional.ofNullable(
                         jpaQueryFactory
                                 .select(postDetailInfoProjection(user))
@@ -101,7 +101,7 @@ public class PostQueryRepository {
             LocalDate startDate,
             LocalDate endDate) {
 
-        List<PostDetailInfo> postDetailList = jpaQueryFactory
+        List<PostDetailInfoDto> postDetailList = jpaQueryFactory
                 .select(postDetailInfoProjection(user))
                 .from(post)
                 .leftJoin(comment).on(comment.post.eq(post).and(comment.deletedAt.isNull()))

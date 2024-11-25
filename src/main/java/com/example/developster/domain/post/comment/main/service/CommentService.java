@@ -7,8 +7,8 @@ import com.example.developster.domain.post.comment.main.dto.request.CommentCreat
 import com.example.developster.domain.post.comment.main.dto.response.CommentCreateResponseDto;
 import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateRequestDto;
 import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateResponseDto;
-import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetail;
-import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetail;
+import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetailDto;
+import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetailDto;
 import com.example.developster.domain.post.comment.main.entity.Comment;
 import com.example.developster.domain.post.comment.main.repository.CommentQueryRepository;
 import com.example.developster.domain.post.comment.main.repository.CommentRepository;
@@ -57,26 +57,23 @@ public class CommentService {
         return new CommentCreateResponseDto(savedComment);
     }
 
-    public CommentSummariesDetail readComments(User user, Long postId, Long lastId, int size) {
-        Slice<CommentDetailInfo> allComments = commentQueryRepository.getAllComments(user, lastId, size);
-        return new CommentSummariesDetail(allComments);
+    public CommentSummariesDetailDto readComments(User user, Long postId, Long lastId, int size) {
+        Slice<CommentDetailInfoDto> allComments = commentQueryRepository.getAllComments(user, lastId, size);
+        return new CommentSummariesDetailDto(allComments);
     }
 
-    public RepliesSummariesDetail readReplies(User user, Long commentId, Long lastId, int size) {
-        Slice<CommentDetailInfo> allReplies = commentQueryRepository.getAllReplies(user, commentId, lastId, size);
-        return new RepliesSummariesDetail(allReplies);
+    public RepliesSummariesDetailDto readReplies(User user, Long commentId, Long lastId, int size) {
+        Slice<CommentDetailInfoDto> allReplies = commentQueryRepository.getAllReplies(user, commentId, lastId, size);
+        return new RepliesSummariesDetailDto(allReplies);
     }
 
     @Transactional
     public CommentUpdateResponseDto updateComment(Long commentId, User loginUser, CommentUpdateRequestDto dto) {
         //요청을 보낸 유저가 작성한 코멘트가 맞는지 확인
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
-        Long writerId = comment.getUser().getId();
 
-        //틀리면
-        if (!Objects.equals(writerId, loginUser.getId())) {
-            throw new BaseException(ErrorCode.UNAUTHORIZED_ACCESS);
-        }
+        comment.isValidAuthor(loginUser.getId());
+
         comment.setContents(dto.getContents());
 
         return new CommentUpdateResponseDto(comment.getId());
@@ -86,12 +83,9 @@ public class CommentService {
     public void deleteComment(Long commentId, User loginUser) {
         //요청을 보낸 유저가 작성한 코멘트가 맞는지 확인
         Comment comment = commentRepository.findByIdOrElseThrow(commentId);
-        Long writerId = comment.getUser().getId();
 
-        //틀리면
-        if (!Objects.equals(writerId, loginUser.getId())) {
-            throw new BaseException(ErrorCode.UNAUTHORIZED_ACCESS);
-        }
+        comment.isValidAuthor(loginUser.getId());
+
         comment.delete();
     }
 

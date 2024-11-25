@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public record PostDetailInfo(
+public record PostDetailInfoDto(
         Long postId,
         String title,
         String content,

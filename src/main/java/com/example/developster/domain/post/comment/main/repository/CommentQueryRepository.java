@@ -1,7 +1,7 @@
 package com.example.developster.domain.post.comment.main.repository;
 
 import com.example.developster.domain.post.comment.like.entity.QCommentLike;
-import com.example.developster.domain.post.comment.main.dto.CommentDetailInfo;
+import com.example.developster.domain.post.comment.main.dto.CommentDetailInfoDto;
 import com.example.developster.domain.post.comment.main.entity.QComment;
 import com.example.developster.domain.post.main.entity.QPost;
 import com.example.developster.domain.user.main.dto.UserInfoDto;
@@ -28,8 +28,8 @@ public class CommentQueryRepository {
     QCommentLike commentLike = QCommentLike.commentLike;
     QPost post = QPost.post;
 
-    public Slice<CommentDetailInfo> getAllComments (User user, Long lastCommentId, int pageSize){
-        List<CommentDetailInfo> commentDetailInfoList = getQuery(user)
+    public Slice<CommentDetailInfoDto> getAllComments (User user, Long lastCommentId, int pageSize){
+        List<CommentDetailInfoDto> commentDetailInfoList = getQuery(user)
                 .where(
                         comment.parentComment.isNull(),
                         post.deletedAt.isNull(),
@@ -44,8 +44,8 @@ public class CommentQueryRepository {
         return getSlice(pageSize, commentDetailInfoList);
     }
 
-    public Slice<CommentDetailInfo> getAllReplies (User user,Long commentId, Long lastCommentId, int pageSize){
-        List<CommentDetailInfo> commentDetailInfoList = getQuery(user)
+    public Slice<CommentDetailInfoDto> getAllReplies (User user, Long commentId, Long lastCommentId, int pageSize){
+        List<CommentDetailInfoDto> commentDetailInfoList = getQuery(user)
                 .where(
                         comment.parentComment.id.eq(commentId),
                         post.deletedAt.isNull(),
@@ -60,11 +60,11 @@ public class CommentQueryRepository {
         return getSlice(pageSize, commentDetailInfoList);
     }
 
-    private JPAQuery<CommentDetailInfo> getQuery(User user) {
+    private JPAQuery<CommentDetailInfoDto> getQuery(User user) {
         return jpaQueryFactory
                 .select(
                         Projections.constructor(
-                                CommentDetailInfo.class,
+                                CommentDetailInfoDto.class,
                                 post.id,
                                 comment.id,
                                 comment.contents,
@@ -84,7 +84,7 @@ public class CommentQueryRepository {
                 .leftJoin(commentLike).on(commentLike.comment.eq(comment).and(commentLike.isLike.isTrue()));
     }
 
-    private static SliceImpl<CommentDetailInfo> getSlice(int pageSize, List<CommentDetailInfo> commentDetailInfoList) {
+    private static SliceImpl<CommentDetailInfoDto> getSlice(int pageSize, List<CommentDetailInfoDto> commentDetailInfoList) {
         boolean hasNext = commentDetailInfoList.size() > pageSize;
         if (hasNext) {
             commentDetailInfoList.remove(pageSize);

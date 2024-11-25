@@ -56,5 +56,4 @@ public class Follow {
         this.status = Status.ACCEPT;
     }
 
-
 }

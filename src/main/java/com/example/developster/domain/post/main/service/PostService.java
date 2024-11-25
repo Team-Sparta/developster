@@ -1,6 +1,6 @@
 package com.example.developster.domain.post.main.service;
 
-import com.example.developster.domain.post.main.dto.PostDetailInfo;
+import com.example.developster.domain.post.main.dto.PostDetailInfoDto;
 import com.example.developster.domain.post.main.dto.request.WritePostRequestDto;
 import com.example.developster.domain.post.main.dto.response.PostIdResponseDto;
 import com.example.developster.domain.post.main.dto.response.PostListResponseDto;
@@ -58,7 +58,7 @@ public class PostService {
     @Transactional(readOnly = true)
     @Cacheable("posts")
     public PostResponseDto loadPost(User user, Long postId) {
-        PostDetailInfo postDetailInfo = postQueryRepository.getPostDetailById(postId, user);
+        PostDetailInfoDto postDetailInfo = postQueryRepository.getPostDetailById(postId, user);
         List<String> urlList = mediaQueryRepository.getUrlList(postId);
 
         return new PostResponseDto(postDetailInfo, new MediaInfo(urlList, urlList.size()));
