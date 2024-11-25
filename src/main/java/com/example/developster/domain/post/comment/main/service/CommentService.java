@@ -96,9 +96,6 @@ public class CommentService {
     }
 
     private void sendCommentNotification(User sender, Post post, Comment comment) {
-        System.out.println("recipient_id: " + comment.getUser().getId().toString());
-        System.out.println("sender_id: " + sender.getId().toString());
-
         String message = sender.getName() + "님이 " + truncate(post.getTitle(), 10) + "에 댓글을 달았습니다.";
         notificationService.sendNotification(
                 comment.getUser(),

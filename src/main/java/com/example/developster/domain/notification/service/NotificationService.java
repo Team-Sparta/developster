@@ -12,6 +12,7 @@ import com.example.developster.global.exception.InvalidParamException;
 import com.example.developster.global.exception.code.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,8 +82,8 @@ public class NotificationService {
     public void sendNotificationToAllUsers(User loginMember, CreateNotificationRequest request) {
         validateAdmin(loginMember);
         List<User> allMembers = userRepository.findAllByStatus(User.Status.ACTIVE);
-        allMembers.forEach(member -> CompletableFuture.runAsync(
-                () -> sendAsync(member, request.notificationType(), request.content(), request.referenceId())));
+        allMembers.forEach(member -> sendAsync(
+                member, request.notificationType(), request.content(), request.referenceId()));
     }
 
     private void validateAdmin(User loginMember) {
@@ -91,6 +92,7 @@ public class NotificationService {
         }
     }
 
+    @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void sendAsync(User recipient, NotificationType notificationType, String content, Long referenceId) {
         Notification newNotification = Notification.builder()
@@ -104,7 +106,6 @@ public class NotificationService {
         log.info("Thread: {}, Notification sent to user: {}, type: {}, content: {}, reference_id: {}",
                 Thread.currentThread().getName(), recipient.getId(), notificationType, content, referenceId);
     }
-
     private String makeTimeIncludeId(Long userId) { // (3)
         return userId + "_" + System.currentTimeMillis();
     }

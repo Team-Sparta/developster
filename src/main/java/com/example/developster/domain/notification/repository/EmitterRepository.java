@@ -24,6 +24,10 @@ public class EmitterRepository {
         emitters.remove(emitterId);
     }
 
+    public Map<String, SseEmitter> findAllEmitter(String userId) {
+        return this.emitters;
+    }
+
     public Map<String, Object> findAllEventCacheStartWithByUserId(String userId) {
         return eventCache.entrySet().stream()
                 .filter(entry -> entry.getKey().startsWith(userId)) // userId로 시작하는 이벤트들 필터링
