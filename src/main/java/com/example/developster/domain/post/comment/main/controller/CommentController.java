@@ -2,10 +2,10 @@ package com.example.developster.domain.post.comment.main.controller;
 
 import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateRequestDto;
 import com.example.developster.domain.post.comment.main.dto.response.CommentUpdateResponseDto;
-import com.example.developster.domain.post.comment.main.dto.summary.CommentsSummaries;
-import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetail;
-import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummaries;
-import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetail;
+import com.example.developster.domain.post.comment.main.dto.summary.CommentsSummariesDto;
+import com.example.developster.domain.post.comment.main.dto.summary.CommentSummariesDetailDto;
+import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDetailDto;
+import com.example.developster.domain.post.comment.main.dto.summary.RepliesSummariesDto;
 import com.example.developster.domain.post.comment.main.dto.request.CommentCreateRequestDto;
 import com.example.developster.domain.post.comment.main.dto.response.CommentCreateResponseDto;
 import com.example.developster.domain.post.comment.main.service.CommentService;
@@ -51,15 +51,15 @@ public class CommentController{
             description = "한 게시물의 댓글을 모두 조회합니다."
     )
     @GetMapping
-    public ResponseEntity<CommonResponse<CommentsSummaries>> readComments(
+    public ResponseEntity<CommonResponse<CommentsSummariesDto>> readComments(
             @PathVariable Long postId,
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int size,
             @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
 
     ){
-        CommentSummariesDetail resDetail = commentService.readComments(loginUser,postId,lastId, size);
-        return CommonResponse.success(SuccessCode.SUCCESS, new CommentsSummaries(resDetail));
+        CommentSummariesDetailDto resDetail = commentService.readComments(loginUser,postId,lastId, size);
+        return CommonResponse.success(SuccessCode.SUCCESS, new CommentsSummariesDto(resDetail));
     }
 
     @Operation(
@@ -67,15 +67,15 @@ public class CommentController{
             description = "한 댓글의 답글을 모두 조회합니다."
     )
     @GetMapping("/{commentId}")
-    public ResponseEntity<CommonResponse<RepliesSummaries>> readReplies(
+    public ResponseEntity<CommonResponse<RepliesSummariesDto>> readReplies(
             @PathVariable Long postId,
             @PathVariable Long commentId,
             @RequestParam(required = false) Long lastId,
             @RequestParam(defaultValue = "10") int size,
             @SessionAttribute(AuthConstants.LOGIN_USER) User loginUser
     ){
-        RepliesSummariesDetail resDetail =  commentService.readReplies(loginUser,commentId,lastId,size);
-        return CommonResponse.success(SuccessCode.SUCCESS, new RepliesSummaries(resDetail));
+        RepliesSummariesDetailDto resDetail =  commentService.readReplies(loginUser,commentId,lastId,size);
+        return CommonResponse.success(SuccessCode.SUCCESS, new RepliesSummariesDto(resDetail));
     }
 
     @Operation(

@@ -4,6 +4,7 @@ import com.example.developster.domain.post.comment.like.entity.CommentLike;
 import com.example.developster.domain.post.main.entity.Post;
 import com.example.developster.domain.user.main.entity.User;
 import com.example.developster.global.entity.BaseTimeEntity;
+import com.example.developster.global.exception.BaseException;
 import com.example.developster.global.exception.InvalidParamException;
 import com.example.developster.global.exception.code.ErrorCode;
 import jakarta.persistence.*;
@@ -17,6 +18,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -66,5 +68,11 @@ public class Comment extends BaseTimeEntity {
             throw new InvalidParamException(ErrorCode.ALREADY_DELETED_POST);
         }
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void isValidAuthor(Long loginUserId) {
+        if (!Objects.equals(this.user.getId(), loginUserId)) {
+            throw new BaseException(ErrorCode.UNAUTHORIZED_ACCESS);
+        }
     }
 }

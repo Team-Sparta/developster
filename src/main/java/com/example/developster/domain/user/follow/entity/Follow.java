@@ -51,10 +51,8 @@ public class Follow {
         this.followedAt = LocalDateTime.now();
         this.status = status;
     }
-
     public void accept(Follow follow) {
         this.status = Status.ACCEPT;
     }
-
 
 }

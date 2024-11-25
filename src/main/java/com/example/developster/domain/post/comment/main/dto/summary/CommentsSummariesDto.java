@@ -2,11 +2,11 @@ package com.example.developster.domain.post.comment.main.dto.summary;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CommentsSummaries {
+public class CommentsSummariesDto {
     @JsonProperty("commentsSummaries")
-    private CommentSummariesDetail details;
+    private CommentSummariesDetailDto details;
 
-    public CommentsSummaries(CommentSummariesDetail detail) {
+    public CommentsSummariesDto(CommentSummariesDetailDto detail) {
         this.details = detail;
     }
 }
